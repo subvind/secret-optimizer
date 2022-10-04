@@ -1,0 +1,25 @@
+{
+  "name": "highly-scrambled",
+  "author": "Travis Burandt <travis.burandt@gmail.com> (https://istrav.com)",
+  "version": "1.0.4",
+  "description": "Idea Management Software (FMS)",
+  "homepage": "https://istrav.com",
+  "bugs": {
+    "url": "https://github.com/trabur/highly-scrambled/issues"
+  },
+  "license": "Fair Source 25 (v0.9).",
+  "scripts": {
+    "examples:start-machine": "ts-node ./examples/start-machine.ts",
+    "tests": "ts-node tests.ts"
+  },
+  "dependencies": {
+    "leveldown": "^6.1.1",
+    "pouchdb-adapter-idb": "^7.3.0",
+    "pouchdb-adapter-leveldb": "^7.3.0",
+    "pouchdb-adapter-memory": "^7.3.0",
+    "rxdb": "^12.7.16",
+    "rxjs": "^7.5.6",
+    "seedrandom": "^3.0.5",
+    "uuid": "^8.3.2"
+  }
+}
