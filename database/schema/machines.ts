@@ -14,6 +14,17 @@ export default {
       ref: 'plugboard',
       type: 'string'
     },
+    targetCombinationCount: {
+      type: 'number',
+      default: 26
+    },
+    combinations: {
+      type: 'array',
+      ref: 'combination',
+      items: {
+        type: 'string'
+      }
+    },
     targetRotorCount: {
       type: 'number',
       default: 26

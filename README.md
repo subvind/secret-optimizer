@@ -36,6 +36,18 @@ calculating sortest path:
 bounce through the machine off the reflector and back so that we see a single 
 lightboard letter show up.
 
+with each key press:
+- universe: in a visible environment 26 galaxies expand apart
+- galaxy: in a gravitational environment 26 stars go around a single point
+- star: in a ranking environment 26 quorums layered by onion model
+- quorum: in a trustless environment 26 machines move geospatialy
+- machine: in a semitrust environment 26 rotors swap and rotate
+- rotor: in a trustful environment 26 crosswires defrequency
+- crosswire: in a secure environment 26 letters plain text transmit
+
+> note: we will be encoding and decoding within machines; the number of possible combinations here is 1 machine with 26 rotors each with 26 crosswires each with 26 letters each // MATH: 26^26^26... = Infinity
+
+The space that exists between machines must never contain plain text messages. Instead every message between each machine must be encoded, transmitted, and then decoded. One important thing that needs to be established between machines is a consensus (important for leader election) amongst one another. There could be 100s of machines out there however the default is a quorum (min # of memberships) of 26 needed in order esablish valid rules; which is a great number for confusion because there are also only 26 possible letters.
 
 
 ```js

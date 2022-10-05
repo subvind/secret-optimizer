@@ -10,13 +10,13 @@ export default {
     seed: {
       type: 'string'
     },
+    rotateCount: {
+      type: 'number',
+      default: 0
+    },
     targetCrosswireCount: {
       type: 'number',
       default: 26
-    },
-    machine: {
-      ref: 'machine',
-      type: 'string'
     },
     crosswires: {
       type: 'array',
@@ -25,8 +25,12 @@ export default {
         type: 'string'
       }
     },
+    machine: {
+      ref: 'machine',
+      type: 'string'
+    },
   },
-  required: ['id', 'seed', 'targetCrosswireCount', 'machine'],
+  required: ['id', 'seed', 'rotateCount', 'targetCrosswireCount', 'machine'],
   indexes: [
     ['seed', 'machine']
   ]

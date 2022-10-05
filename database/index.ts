@@ -2,6 +2,7 @@
 import { createRxDatabase, addRxPlugin } from 'rxdb';
 // import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 
+import combinations from './schema/combinations'
 import crosswires from './schema/crosswires'
 import machines from './schema/machines'
 import machineMethods from './methods/machines'
@@ -11,6 +12,9 @@ import rotors from './schema/rotors'
 
 async function addCollectionsToDatabase (database) {
   return await database.addCollections({
+    combinations: {
+      schema: combinations
+    },
     crosswires: {
       schema: crosswires
     },
