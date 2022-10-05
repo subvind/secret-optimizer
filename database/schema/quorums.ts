@@ -14,6 +14,10 @@ export default {
       type: 'number',
       default: 26
     },
+    targetCombinationCount: {
+      type: 'number',
+      default: 26
+    },
     machines: {
       type: 'array',
       ref: 'machine',

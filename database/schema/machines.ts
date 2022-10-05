@@ -14,6 +14,10 @@ export default {
       ref: 'plugboard',
       type: 'string'
     },
+    quorum: {
+      ref: 'quorum',
+      type: 'string'
+    },
     targetCombinationCount: {
       type: 'number',
       default: 26

@@ -11,21 +11,15 @@ console.log(`release: v${highlyScrambled.version()}`)
 async function build (topSecret: string, machineCount, rotorCount, crosswireCount) {
   let db = await highlyScrambled.db()
 
-  let machine = await db.machines.insert({
+  let quorum = await db.machines.insert({
     id: uuidv4(),
-    seed: topSecret
-  })
-  console.log('machine', machine.seedRotors())
-
-  let rotors = await db.rotors.find({
-    selector: {
-      machine: machine.id,
-    }
+    seed: topSecret,
+    targetMemberCount: 26,
+    targetRotorCount: 26,
+    targetCombinationCount: 26,
   })
 
-  rotors.forEach(rotor => {
-    rotor.seedCrosswires()
-  });
+  quorum.initMachines(db)
 }
 
 // required storage system
