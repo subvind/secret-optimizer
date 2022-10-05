@@ -7,19 +7,16 @@ export default {
     id: {
       type: 'string',
     },
-    slug: {
+    seed: {
       type: 'string'
     },
-    token: {
-      type: 'string'
-    },
-    namespace: {
-      ref: 'namespace',
+    machine: {
+      ref: 'machine',
       type: 'string'
     }
   },
-  required: ['id', 'slug', 'token', 'namespace'],
+  required: ['id', 'seed', 'machine'],
   indexes: [
-    ['slug', 'namespace']
+    ['seed', 'machine']
   ]
 }

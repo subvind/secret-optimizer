@@ -24,6 +24,7 @@ export default {
   },
   required: ['id', 'input', 'output', 'weight', 'rotor'],
   indexes: [
-    ['input', 'output']
+    ['input', 'rotor'],
+    ['output', 'rotor']
   ]
 }

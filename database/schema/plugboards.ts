@@ -7,6 +7,9 @@ export default {
     id: {
       type: 'string',
     },
+    seed: {
+      type: 'string',
+    },
     a: {
       type: 'number',
       default: 1
@@ -116,8 +119,8 @@ export default {
       type: 'string'
     }
   },
-  required: ['id', 'machine'],
+  required: ['id', 'seed', 'machine'],
   indexes: [
-    ['slug', 'namespace']
+    ['seed', 'machine']
   ]
 }

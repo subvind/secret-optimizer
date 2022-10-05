@@ -4,6 +4,7 @@ import { createRxDatabase, addRxPlugin } from 'rxdb';
 
 import crosswires from './schema/crosswires'
 import machines from './schema/machines'
+import machineMethods from './methods/machines'
 import plugboards from './schema/plugboards'
 import reflectors from './schema/reflectors'
 import rotors from './schema/rotors'
@@ -14,7 +15,8 @@ async function addCollectionsToDatabase (database) {
       schema: crosswires
     },
     machines: {
-      schema: machines
+      schema: machines,
+      methods: machineMethods
     },
     plugboards: {
       schema: plugboards

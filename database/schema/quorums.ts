@@ -1,5 +1,5 @@
 export default {
-  title: 'rotor schema',
+  title: 'quorum schema',
   version: 0,
   primaryKey: 'id',
   type: 'object',
@@ -8,26 +8,22 @@ export default {
       type: 'string',
     },
     seed: {
-      type: 'string'
+      type: 'string',
     },
-    targetCrosswireCount: {
+    targetMemberCount: {
       type: 'number',
       default: 26
     },
-    machine: {
-      ref: 'machine',
-      type: 'string'
-    },
-    crosswires: {
+    machines: {
       type: 'array',
-      ref: 'crosswire',
+      ref: 'machine',
       items: {
         type: 'string'
       }
     },
   },
-  required: ['id', 'seed', 'targetCrosswireCount', 'machine'],
+  required: ['id', 'seed', 'targetMemberCount'],
   indexes: [
-    ['seed', 'machine']
+    'seed'
   ]
 }

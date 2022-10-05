@@ -14,6 +14,10 @@ export default {
       ref: 'plugboard',
       type: 'string'
     },
+    targetRotorCount: {
+      type: 'number',
+      default: 26
+    },
     rotors: {
       type: 'array',
       ref: 'rotor',
@@ -28,6 +32,6 @@ export default {
   },
   required: ['id', 'seed'],
   indexes: [
-    ['seed']
+    ['seed', 'quorum']
   ]
 }
