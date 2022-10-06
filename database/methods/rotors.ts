@@ -33,7 +33,9 @@ export default {
       }
     })
     await query.update({
-      crosswires: crosswires
+      $set: {
+        crosswires: crosswires
+      }
     })
   }
 }

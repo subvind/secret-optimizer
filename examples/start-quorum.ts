@@ -11,6 +11,7 @@ console.log(`release: v${highlyScrambled.version()}`)
 async function build (topSecret: string, machineCount: number, rotorCount: number, crosswireCount: number) {
   let db = await highlyScrambled.db()
 
+  console.log('seed', topSecret)
   let quorum = await db.quorums.insert({
     id: uuidv4(),
     seed: topSecret,
@@ -18,7 +19,7 @@ async function build (topSecret: string, machineCount: number, rotorCount: numbe
     targetRotorCount: rotorCount,
     targetCombinationCount: crosswireCount,
   })
-  console.log('quorum', quorum.seed)
+  console.log('quorum', 1, quorum.id)
 
   quorum.initMachines(db)
 }

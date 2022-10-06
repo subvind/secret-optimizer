@@ -12,10 +12,11 @@ export default {
   },
   initCombinations: async function (db: any) {
     let combinations = []
+    console.log('machine', this.id, 'alphabet', this.alphabet)
     
     // create combinations
     let chars = this.alphabet.split('')
-    chars.forEach(async (char, index) => {
+    await Promise.all(chars.map(async (char, index) => {
       let combination = await db.combinations.insert({
         id: uuidv4(),
         letter: char,
@@ -23,7 +24,8 @@ export default {
         machine: this.id
       })
       combinations.push(combination.id)
-    });
+    }));
+    console.log('machine', this.id, 'combinations', combinations)
 
     // add combinations to machine list
     let query = db.machines.find({
@@ -32,7 +34,9 @@ export default {
       }
     })
     await query.update({
-      combinations: combinations
+      $set: {
+        combinations: combinations
+      }
     })
   },
   cleanupRotors: async function (db: any) {
@@ -56,9 +60,10 @@ export default {
         machine: this.id,
         targetCrosswireCount: this.targetCombinationCount
       })
-      rotor.initCrosswires(db)
+      // rotor.initCrosswires(db)
       rotors.push(rotor.id)
     }
+    console.log('machine', this.id, 'rotors', rotors)
 
     // add rotors to machine list
     let query = db.machines.find({
@@ -67,7 +72,9 @@ export default {
       }
     })
     await query.update({
-      rotors: rotors
+      $set: {
+        rotors: rotors
+      }
     })
   }
 }

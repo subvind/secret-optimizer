@@ -27,8 +27,9 @@ export default {
         targetCombinationCount: this.targetCombinationCount,
         targetRotorCount: this.targetRotorCount,
       })
-      // machine.initCombinations(db)
-      // machine.initRotors(db)
+      console.log('machine', i, machine.id)
+      machine.initCombinations(db)
+      machine.initRotors(db)
       machines.push(machine.id)
     }
 
@@ -39,7 +40,9 @@ export default {
       }
     })
     await query.update({
-      machines: machines
+      $set: {
+        machines: machines
+      }
     })
   }
 }
