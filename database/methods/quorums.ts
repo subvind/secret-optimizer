@@ -32,6 +32,7 @@ export default {
       machine.initRotors(db)
       machines.push(machine.id)
     }
+    console.log('quorum', this.id, 'machines', machines)
 
     // add machines to quorum list
     let query = db.quorums.find({
