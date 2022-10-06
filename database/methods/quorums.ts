@@ -27,12 +27,11 @@ export default {
         targetCombinationCount: this.targetCombinationCount,
         targetRotorCount: this.targetRotorCount,
       })
-      console.log('machine', i, machine.id)
-      machine.initCombinations(db)
-      machine.initRotors(db)
+      await machine.initCombinations(db)
+      await machine.initRotors(db)
       machines.push(machine.id)
     }
-    console.log('quorum', this.id, 'machines', machines)
+    // console.log('quorum', this.id, 'machines', machines)
 
     // add machines to quorum list
     let query = db.quorums.find({
@@ -45,5 +44,7 @@ export default {
         machines: machines
       }
     })
+
+    console.log('initMachines', 'quorum', this.id)
   }
 }

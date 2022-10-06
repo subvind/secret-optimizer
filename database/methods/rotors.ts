@@ -25,6 +25,7 @@ export default {
       })
       crosswires.push(crosswire.id)
     }
+    // console.log('rotor', this.id, 'crosswires', crosswires)
 
     // add crosswires to rotors list
     let query = db.rotors.find({
@@ -37,5 +38,7 @@ export default {
         crosswires: crosswires
       }
     })
+
+    console.log('initCrosswires', 'rotor', this.id)
   }
 }

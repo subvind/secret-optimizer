@@ -12,7 +12,7 @@ export default {
   },
   initCombinations: async function (db: any) {
     let combinations = []
-    console.log('machine', this.id, 'alphabet', this.alphabet)
+    // console.log('machine', this.id, 'alphabet', this.alphabet)
     
     // create combinations
     let chars = this.alphabet.split('')
@@ -25,7 +25,7 @@ export default {
       })
       combinations.push(combination.id)
     }));
-    console.log('machine', this.id, 'combinations', combinations)
+    // console.log('machine', this.id, 'combinations', combinations)
 
     // add combinations to machine list
     let query = db.machines.find({
@@ -38,6 +38,8 @@ export default {
         combinations: combinations
       }
     })
+
+    console.log('initCombinations', 'machine', this.id)
   },
   cleanupRotors: async function (db: any) {
     let query = db.rotors.find({
@@ -60,10 +62,10 @@ export default {
         machine: this.id,
         targetCrosswireCount: this.targetCombinationCount
       })
-      // rotor.initCrosswires(db)
+      await rotor.initCrosswires(db)
       rotors.push(rotor.id)
     }
-    console.log('machine', this.id, 'rotors', rotors)
+    // console.log('machine', this.id, 'rotors', rotors)
 
     // add rotors to machine list
     let query = db.machines.find({
@@ -76,5 +78,7 @@ export default {
         rotors: rotors
       }
     })
+
+    console.log('intiRotors', 'machine', this.id)
   }
 }

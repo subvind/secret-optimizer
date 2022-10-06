@@ -11,7 +11,7 @@ console.log(`release: v${highlyScrambled.version()}`)
 async function build (topSecret: string, machineCount: number, rotorCount: number, crosswireCount: number) {
   let db = await highlyScrambled.db()
 
-  console.log('seed', topSecret)
+  console.log('quorum seed', topSecret)
   let quorum = await db.quorums.insert({
     id: uuidv4(),
     seed: topSecret,
@@ -21,7 +21,7 @@ async function build (topSecret: string, machineCount: number, rotorCount: numbe
   })
   console.log('quorum', 1, quorum.id)
 
-  quorum.initMachines(db)
+  await quorum.initMachines(db)
 }
 
 // required storage system

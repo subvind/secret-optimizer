@@ -11,6 +11,7 @@ import quorums from './schema/quorums'
 import quorumMethods from './methods/quorums'
 import reflectors from './schema/reflectors'
 import rotors from './schema/rotors'
+import rotorMethods from './methods/rotors'
 
 async function addCollectionsToDatabase (database) {
   return await database.addCollections({
@@ -35,7 +36,8 @@ async function addCollectionsToDatabase (database) {
       schema: reflectors
     },
     rotors: {
-      schema: rotors
+      schema: rotors,
+      methods: rotorMethods
     },
   });
 }
