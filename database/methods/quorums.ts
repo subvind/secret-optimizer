@@ -22,10 +22,10 @@ export default {
       let machine = await db.machines.insert({
         id: uuidv4(),
         seed: this.seed,
+        alphabet: main.substring(0, this.targetCombinationCount),
         quorum: this.id,
         targetCombinationCount: this.targetCombinationCount,
         targetRotorCount: this.targetRotorCount,
-        alphabet: main.substring(0, this.targetCombinationCount)
       })
       // machine.initCombinations(db)
       // machine.initRotors(db)
