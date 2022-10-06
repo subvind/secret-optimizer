@@ -32,6 +32,12 @@ async function getMachine (id: string) {
   return await db.machines.findOne(id).exec()
 }
 
+async function stream (machine: any, chunk: string) {
+  let db = await highlyScrambled.db()
+  
+  return await machine.stream(db, machine, chunk)
+}
+
 // required storage system
 (async function () {
   let database = await highlyScrambled.database(com.database.server)
@@ -41,14 +47,8 @@ async function getMachine (id: string) {
   let machineId = quorum.machines[0]
   let machine = await getMachine(machineId)
 
-  // any letter a-z
-  let plainText: string = 'h' // 1 char limit
-  console.log('plainText', plainText)
+  let message = 'hello'
+  let value = await stream(machine, message)
 
-  // todo: work on this api
-  let encrypted = machine.keyPress(db, plainText)
-  console.log('encrypted', encrypted)
-
-  let decrypted = machine.decrypt('isTrav', 1, plainText)
-  console.log('decrypted', decrypted)
+  console.log('secretMessage', value)
 })()

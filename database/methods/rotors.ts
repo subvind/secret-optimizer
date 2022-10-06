@@ -12,14 +12,23 @@ export default {
       }
     }).exec()
 
+    // randomly order crosswires
+    let rng = seedrandom.xor4096(`crosswires:${this.seed}:${this.keyPressCount}`)
     if (rotorCrosswires) {
       rotorCrosswires.forEach(async (crosswire) => {
-        await crosswire.scramble(db)
+        let query = db.crosswires.findOne({
+          selector: {
+            id: crosswire
+          }
+        })
+        await query.update({
+          $set: {
+            order: rng()
+          }
+        })
       });
+      console.log('scramble crosswires', this.id)
     }
-    
-    // spin rotors
-    let rng = seedrandom.xor4096(`crosswires:${this.seed}`)
   },
   cleanupCrosswires: async function (db: any) {
     let query = db.crosswires.find({

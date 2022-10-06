@@ -14,14 +14,6 @@ export default {
       type: 'number',
       default: 0.5
     },
-    rotatePosition: {
-      type: 'number',
-      default: 0
-    },
-    movesPerKeyPress: {
-      type: 'number',
-      default: 1
-    },
     targetCrosswireCount: {
       type: 'number',
       default: 26
@@ -38,7 +30,7 @@ export default {
       type: 'string'
     },
   },
-  required: ['id', 'seed', 'order', 'rotatePosition', 'movesPerKeyPress', 'targetCrosswireCount', 'machine'],
+  required: ['id', 'seed', 'targetCrosswireCount', 'machine'],
   indexes: [
     ['seed', 'machine']
   ]

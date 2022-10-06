@@ -3,31 +3,39 @@ import { v4 as uuidv4 } from 'uuid';
 import seedrandom from 'seedrandom'
 
 export default {
+  async stream (db: any, machine: any, chunk: string) {
+    let letters = chunk.split('')
+    let code = []
+    letters.forEach((letter, index) => {
+      // any letter a-z
+      let plainText: string = letter // 1 char limit
+      console.log('plainText', plainText)
+    
+      let encrypted = machine.encrypt(db, index, plainText)
+      console.log('encrypted', encrypted)
+    
+      let decrypted = machine.decrypt(db, index, plainText)
+      console.log('decrypted', decrypted)
 
-  // encrypt(topSecret: string, keyPressCount: number, message: string) {
-
-  // },
-  // decrypt(topSecret: string, keyPressCount: number, message: string) {
-
-  // },
-  resetKeyPressCount: async function(db: any) {
-    // reset key press counter back to 0
-    let query = db.machines.find({
-      selector: {
-        id: this.id
-      }
+      code.push({
+        plainText,
+        encrypted,
+        decrypted
+      })
     })
-    await query.update({
-      $set: {
-        input: undefined,
-        keyPressCount: 0
-      }
+
+    let scrambled = []
+    code.forEach((value, index) => {
+      scrambled.push(value.encrypted)
     })
 
-    // then update crosswires
-    await this.scramble(db)
+    return {
+      original: chunk,
+      scrambled: scrambled.join(''),
+      code
+    }
   },
-  pressKey: async function (db: any, letter: string) {
+  async cipher(db: any, keyPressCount: number, letter: string) {
     // find out what combination this letter is
     let combination = await db.combinations.findOne({
       selector: {
@@ -46,14 +54,39 @@ export default {
       await query.update({
         $set: {
           input: combination.id,
-          keyPressCount: this.keyPressCount + 1
+          keyPressCount: keyPressCount
         }
       })
 
-      console.log('pressKey', letter, combination.id)
+      console.log('encrypt', keyPressCount, combination.id)
       await this.scramble(db)
       await this.processMessage(db)
     }
+
+    return this.output
+  },
+  async encrypt(db: any, keyPressCount: number, letter: string) {
+    return await this.cipher(db, keyPressCount, letter)
+  },
+  async decrypt(db: any, keyPressCount: number, letter: string) {
+    return await this.cipher(db, keyPressCount, letter)
+  },
+  resetKeyPressCount: async function(db: any) {
+    // reset key press counter back to 0
+    let query = db.machines.find({
+      selector: {
+        id: this.id
+      }
+    })
+    await query.update({
+      $set: {
+        input: undefined,
+        keyPressCount: 0
+      }
+    })
+
+    // then update crosswires
+    await this.scramble(db)
   },
   scramble: async function (db: any) {
     let machineRotors = await db.rotors.find({
@@ -63,17 +96,25 @@ export default {
       }
     }).exec()
     
-    let rng = seedrandom.xor4096(`rotors:${this.seed}`)
+    // randomly order rotors
+    let rng = seedrandom.xor4096(`rotors:${this.seed}:${this.keyPressCount}`)
     if (machineRotors) {
       machineRotors.forEach(async (rotor) => {
-        // 
+        let query = db.rotors.findOne({
+          selector: {
+            id: rotor
+          }
+        })
+        await query.update({
+          $set: {
+            order: rng()
+          }
+        })
 
         await rotor.scramble(db)
       });
     }
-
-    // swap rotors
-    
+    console.log('scramble rotors', this.id)
   },
   processMessage: async function (db: any) {
     // start from keyboard
