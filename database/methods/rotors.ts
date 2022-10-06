@@ -1,6 +1,26 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import seedrandom from 'seedrandom'
+
 export default {
+  scramble: async function (db: any) {
+    // scramble crosswires
+    let rotorCrosswires = await db.crosswires.find({
+      selector: {
+        seed: this.seed,
+        rotor: this.id
+      }
+    }).exec()
+
+    if (rotorCrosswires) {
+      rotorCrosswires.forEach(async (crosswire) => {
+        await crosswire.scramble(db)
+      });
+    }
+    
+    // spin rotors
+    let rng = seedrandom.xor4096(`crosswires:${this.seed}`)
+  },
   cleanupCrosswires: async function (db: any) {
     let query = db.crosswires.find({
       selector: {

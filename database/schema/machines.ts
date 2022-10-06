@@ -13,9 +13,21 @@ export default {
     alphabet: {
       type: 'string'
     },
+    input: {
+      ref: 'combination',
+      type: 'string'
+    },
+    output: {
+      ref: 'combination',
+      type: 'string'
+    },
     quorum: {
       ref: 'quorum',
       type: 'string'
+    },
+    keyPressCount: {
+      type: 'number',
+      default: 0
     },
     targetCombinationCount: {
       type: 'number',

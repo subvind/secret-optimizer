@@ -1,6 +1,89 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import seedrandom from 'seedrandom'
+
 export default {
+
+  // encrypt(topSecret: string, keyPressCount: number, message: string) {
+
+  // },
+  // decrypt(topSecret: string, keyPressCount: number, message: string) {
+
+  // },
+  resetKeyPressCount: async function(db: any) {
+    // reset key press counter back to 0
+    let query = db.machines.find({
+      selector: {
+        id: this.id
+      }
+    })
+    await query.update({
+      $set: {
+        input: undefined,
+        keyPressCount: 0
+      }
+    })
+
+    // then update crosswires
+    await this.scramble(db)
+  },
+  pressKey: async function (db: any, letter: string) {
+    // find out what combination this letter is
+    let combination = await db.combinations.findOne({
+      selector: {
+        letter: letter,
+        machine: this.id
+      }
+    }).exec()
+
+    if (combination) {
+      // add details to machine
+      let query = db.machines.find({
+        selector: {
+          id: this.id
+        }
+      })
+      await query.update({
+        $set: {
+          input: combination.id,
+          keyPressCount: this.keyPressCount + 1
+        }
+      })
+
+      console.log('pressKey', letter, combination.id)
+      await this.scramble(db)
+      await this.processMessage(db)
+    }
+  },
+  scramble: async function (db: any) {
+    let machineRotors = await db.rotors.find({
+      selector: {
+        seed: this.seed,
+        machine: this.id
+      }
+    }).exec()
+    
+    let rng = seedrandom.xor4096(`rotors:${this.seed}`)
+    if (machineRotors) {
+      machineRotors.forEach(async (rotor) => {
+        // 
+
+        await rotor.scramble(db)
+      });
+    }
+
+    // swap rotors
+    
+  },
+  processMessage: async function (db: any) {
+    // start from keyboard
+    // send through plugboard
+    // send through rotors asc
+    // go through reflector
+    // send through rotors desc
+    // send through plugboard
+    // end at lightboard
+  },
   cleanupCombinations: async function (db: any) {
     let query = db.combinations.find({
       selector: {
