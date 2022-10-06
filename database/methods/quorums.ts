@@ -27,8 +27,8 @@ export default {
         targetRotorCount: this.targetRotorCount,
         alphabet: main.substring(0, this.targetCombinationCount)
       })
-      machine.initCombinations(db)
-      machine.initRotors(db)
+      // machine.initCombinations(db)
+      // machine.initRotors(db)
       machines.push(machine.id)
     }
 

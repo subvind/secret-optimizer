@@ -7,6 +7,8 @@ import crosswires from './schema/crosswires'
 import machines from './schema/machines'
 import machineMethods from './methods/machines'
 import plugboards from './schema/plugboards'
+import quorums from './schema/quorums'
+import quorumMethods from './methods/quorums'
 import reflectors from './schema/reflectors'
 import rotors from './schema/rotors'
 
@@ -24,6 +26,10 @@ async function addCollectionsToDatabase (database) {
     },
     plugboards: {
       schema: plugboards
+    },
+    quorums: {
+      schema: quorums,
+      methods: quorumMethods
     },
     reflectors: {
       schema: reflectors

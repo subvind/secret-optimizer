@@ -30,7 +30,7 @@ export default {
       }
     },
   },
-  required: ['id', 'seed', 'targetMemberCount'],
+  required: ['id', 'seed', 'targetMemberCount', 'targetRotorCount', 'targetCombinationCount'],
   indexes: [
     'seed'
   ]

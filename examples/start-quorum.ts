@@ -18,6 +18,7 @@ async function build (topSecret: string, machineCount: number, rotorCount: numbe
     targetRotorCount: rotorCount,
     targetCombinationCount: crosswireCount,
   })
+  console.log('quorum', quorum.seed)
 
   quorum.initMachines(db)
 }

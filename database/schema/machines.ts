@@ -13,10 +13,6 @@ export default {
     alphabet: {
       type: 'string'
     },
-    plugboard: {
-      ref: 'plugboard',
-      type: 'string'
-    },
     quorum: {
       ref: 'quorum',
       type: 'string'
@@ -31,6 +27,10 @@ export default {
       items: {
         type: 'string'
       }
+    },
+    plugboard: {
+      ref: 'plugboard',
+      type: 'string'
     },
     targetRotorCount: {
       type: 'number',
@@ -48,7 +48,7 @@ export default {
       type: 'string'
     },
   },
-  required: ['id', 'seed'],
+  required: ['id', 'seed', 'alphabet', 'quorum', 'targetCombinationCount', 'targetRotorCount'],
   indexes: [
     ['seed', 'quorum']
   ]

@@ -9,7 +9,7 @@
   },
   "license": "Fair Source 25 (v0.9).",
   "scripts": {
-    "examples:start-machine": "ts-node ./examples/start-machine.ts",
+    "examples:start-quorum": "ts-node ./examples/start-quorum.ts",
     "tests": "ts-node tests.ts"
   },
   "dependencies": {
