@@ -10,6 +10,9 @@ export default {
     seed: {
       type: 'string'
     },
+    alphabet: {
+      type: 'string'
+    },
     plugboard: {
       ref: 'plugboard',
       type: 'string'

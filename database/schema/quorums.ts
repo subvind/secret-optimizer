@@ -14,6 +14,10 @@ export default {
       type: 'number',
       default: 26
     },
+    targetRotorCount: {
+      type: 'number',
+      default: 26
+    },
     targetCombinationCount: {
       type: 'number',
       default: 26

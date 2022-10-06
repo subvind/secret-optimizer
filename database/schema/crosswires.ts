@@ -7,10 +7,12 @@ export default {
     id: {
       type: 'string',
     },
-    input: {
+    inputCombination: {
+      ref: 'combination',
       type: 'string'
     },
-    output: {
+    outputCombination: {
+      ref: 'combination',
       type: 'string'
     },
     weight: {
@@ -22,9 +24,9 @@ export default {
       type: 'string'
     }
   },
-  required: ['id', 'input', 'output', 'weight', 'rotor'],
+  required: ['id', 'inputCombination', 'outputCombination', 'weight', 'rotor'],
   indexes: [
-    ['input', 'rotor'],
-    ['output', 'rotor']
+    ['inputCombination', 'rotor'],
+    ['outputCombination', 'rotor']
   ]
 }

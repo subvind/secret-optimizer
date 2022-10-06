@@ -8,15 +8,15 @@ let highlyScrambled = com.HighlyScrambled.getInstance()
 console.log(`release: v${highlyScrambled.version()}`)
 
 // example
-async function build (topSecret: string, machineCount, rotorCount, crosswireCount) {
+async function build (topSecret: string, machineCount: number, rotorCount: number, crosswireCount: number) {
   let db = await highlyScrambled.db()
 
-  let quorum = await db.machines.insert({
+  let quorum = await db.quorums.insert({
     id: uuidv4(),
     seed: topSecret,
-    targetMemberCount: 26,
-    targetRotorCount: 26,
-    targetCombinationCount: 26,
+    targetMemberCount: machineCount,
+    targetRotorCount: rotorCount,
+    targetCombinationCount: crosswireCount,
   })
 
   quorum.initMachines(db)
@@ -26,6 +26,6 @@ async function build (topSecret: string, machineCount, rotorCount, crosswireCoun
 (async function () {
   let database = await highlyScrambled.database(com.database.server)
 
-  build('isTrav', 26, 26, 26)
+  build('isTrav', 1, 26, 26)
 })()
 
