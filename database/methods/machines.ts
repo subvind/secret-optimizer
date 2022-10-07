@@ -142,7 +142,9 @@ export default {
     }).exec()
     
     // randomly order rotors
-    let rng = seedrandom.xor4096(`rotors:${this.seed}:${this.channelIndex}:${this.keyPressCount}`)
+    let quorum = await db.quorums.findOne(this.quorum).exec()
+    let environment = `${quorum.environment.galaxy}:${quorum.environment.star}:${quorum.environment.core}`
+    let rng = seedrandom.xor4096(`${this.seed}:${environment}:machine-${this.order}:${this.channelIndex}:${this.keyPressCount}`)
     if (machineRotors) {
       for (const rotor of machineRotors) {
         let query = db.rotors.findOne({
@@ -175,13 +177,17 @@ export default {
     return
   },
   cleanupCombinations: async function (db: any) {
-    let query = db.combinations.find({
+    let oldCombinations = await db.combinations.find({
       selector: {
         machine: this.id
       }
-    })
+    }).exec()
 
-    await query.remove()
+    if (oldCombinations) {
+      for (const record of oldCombinations) {
+        await record.remove()
+      }
+    }
   },
   initCombinations: async function (db: any) {
     let combinations = []
@@ -219,14 +225,19 @@ export default {
     console.log('initCombinations', 'machine', this.id)
   },
   cleanupRotors: async function (db: any) {
-    let query = db.rotors.find({
+    let oldRotors = await db.rotors.find({
       selector: {
         seed: this.seed,
         machine: this.id
       }
-    })
+    }).exec()
 
-    await query.remove()
+    if (oldRotors) {
+      for (const record of oldRotors) {
+        await record.cleanupCrosswires(db)
+        await record.remove()    
+      }
+    }
   },
   initRotors: async function (db: any) {
     let rotors = []

@@ -37,12 +37,12 @@ bounce through the machine off the reflector and back so that we see a single
 lightboard letter show up.
 
 with each key press:
-- universe: in a visible environment 26 galaxies expand apart
-- galaxy: in a gravitational environment 26 stars go around a single point
-- star: in a ranking environment 26 quorums layered by onion model
+- universe: in a visible environment 26 galaxies expand into the void
+- galaxy: in a gravitational environment 26 stars rotate around a black hole
+- star: in a evolutionary environment 26 quorums layered by onion model
 - quorum: in a trustless environment 26 machines move geospatialy
-- machine: in a semitrust environment 26 rotors swap and rotate
-- rotor: in a trustful environment 26 crosswires defrequency
+- machine: in a semitrust environment 26 rotors swap
+- rotor: in a trustful environment 26 crosswires switch
 - crosswire: in a secure environment 26 letters plain text transmit
 
 > note: we will be encoding and decoding within machines; the number of possible combinations here is 1 machine with 26 rotors each with 26 crosswires each with 26 letters each // MATH: 26^26^26... = Infinity
@@ -51,9 +51,10 @@ The space that exists between machines must never contain plain text messages. I
 
 
 ```js
-var rotors = seedrandom.xor4096('machine seed here...')
-console.log('rotor 1', rotors());                // Always 0.9282578795792454
-console.log('rotor 2', rotors());                // Always 0.3752569768646784
-console.log('rotor 3', rotors());                // Always 0.1483929823472782
+// random number generator
+var rng = seedrandom.xor4096('unique seed here...')
+console.log('rotor 1', rng());                // Always 0.9282578795792454
+console.log('rotor 2', rng());                // Always 0.3752569768646784
+console.log('rotor 3', rng());                // Always 0.1483929823472782
 // etc...
 ```

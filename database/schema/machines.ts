@@ -13,13 +13,9 @@ export default {
     alphabet: {
       type: 'string'
     },
-    input: {
-      ref: 'combination',
-      type: 'string'
-    },
-    output: {
-      ref: 'combination',
-      type: 'string'
+    order: {
+      type: 'number',
+      default: 0.5
     },
     quorum: {
       ref: 'quorum',

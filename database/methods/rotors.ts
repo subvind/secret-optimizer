@@ -7,6 +7,8 @@ export default {
    * a way to randomly organize things
    */
   scramble: async function (db: any) {
+    // 
+
     // scramble crosswires
     let rotorCrosswires = await db.crosswires.find({
       selector: {
@@ -19,7 +21,10 @@ export default {
     }).exec()
 
     // randomly order crosswires
-    let rng = seedrandom.xor4096(`crosswires:${this.seed}:${this.channelIndex}:${this.keyPressCount}`)
+    let machine = await db.machines.findOne(this.machine).exec() 
+    let quorum = await db.quorums.findOne(machine.quorum).exec()
+    let environment = `${quorum.environment.galaxy}:${quorum.environment.star}:${quorum.environment.core}`
+    let rng = seedrandom.xor4096(`${this.seed}:${environment}:machine-${machine.order}:rotor-${this.order}:${this.channelIndex}:${machine.keyPressCount}`)
     if (rotorCrosswires) {
       for (const crosswire of rotorCrosswires) {
         let query = db.crosswires.findOne({
@@ -37,14 +42,18 @@ export default {
     }
   },
   cleanupCrosswires: async function (db: any) {
-    let query = db.crosswires.find({
+    let oldCrosswires = await db.crosswires.find({
       selector: {
         seed: this.seed,
         machine: this.id
       }
-    })
+    }).exec()
 
-    await query.remove()
+    if (oldCrosswires) {
+      for (const record of oldCrosswires) {
+        await record.remove()
+      }
+    }
   },
   initCrosswires: async function (db: any) {
     let crosswires = []

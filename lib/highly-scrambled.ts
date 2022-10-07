@@ -65,7 +65,37 @@ export class HighlyScrambled {
     }
   }
 
-  version() {
+  async build (seed: string, environment: any, machineCount: number, rotorCount: number, crosswireCount: number) {
+    // remove existing
+    const oldQuorum = await this.rxdb.quorums.findOne({
+      selector: {
+        seed: seed
+      }
+    }).exec()
+    if (oldQuorum) {
+      console.log('cleanup quorum', oldQuorum.id)
+      await oldQuorum.cleanupMachines(this.rxdb)
+      await oldQuorum.remove();
+    }
+
+    // create new
+    console.log('key', seed)
+    let quorum = await this.rxdb.quorums.insert({
+      id: uuidv4(),
+      seed: seed,
+      environment: environment,
+      targetMemberCount: machineCount,
+      targetRotorCount: rotorCount,
+      targetCombinationCount: crosswireCount,
+    })
+    console.log('quorum', quorum.id)
+
+    await quorum.initMachines(this.rxdb)
+
+    return quorum
+  }
+
+  version(): string {
     return version // 1.0.2
   }
 }

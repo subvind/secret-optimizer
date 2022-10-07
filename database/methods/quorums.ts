@@ -16,14 +16,20 @@ export default {
     
   },
   cleanupMachines: async function (db: any) {
-    let query = db.machines.find({
+    let oldMachines = await db.machines.find({
       selector: {
         seed: this.seed,
         quorum: this.id
       }
-    })
-
-    await query.remove()
+    }).exec()
+    if (oldMachines) {
+      for (const record of oldMachines) {
+        await record.cleanupCombinations(db)
+        await record.cleanupRotors(db)
+    
+        await record.remove()
+      }
+    }
   },
   initMachines: async function (db: any) {
     let machines = []

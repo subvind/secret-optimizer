@@ -10,6 +10,23 @@ export default {
     seed: {
       type: 'string',
     },
+    environment: {
+      type: "object",
+      properties: {
+        galaxy: {
+          type: 'string',
+          default: 'a'
+        },
+        star: {
+          type: 'string',
+          default: 'a'
+        },
+        core: {
+          type: 'string',
+          default: 'a'
+        },
+      }
+    },
     targetMemberCount: {
       type: 'number',
       default: 26
