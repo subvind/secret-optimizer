@@ -9,16 +9,19 @@ export default {
       selector: {
         seed: this.seed,
         rotor: this.id
-      }
+      },
+      sort: [
+        { createdAt: 'asc' } // always start in this order
+      ]
     }).exec()
 
     // randomly order crosswires
     let rng = seedrandom.xor4096(`crosswires:${this.seed}:${this.keyPressCount}`)
     if (rotorCrosswires) {
-      rotorCrosswires.forEach(async (crosswire) => {
+      for (const crosswire of rotorCrosswires) {
         let query = db.crosswires.findOne({
           selector: {
-            id: crosswire
+            id: crosswire.id
           }
         })
         await query.update({
@@ -26,8 +29,8 @@ export default {
             order: rng()
           }
         })
-      });
-      console.log('scramble crosswires', this.id)
+      }
+      // console.log('scramble crosswires', this.id) // noisy
     }
   },
   cleanupCrosswires: async function (db: any) {
@@ -50,7 +53,8 @@ export default {
         inputCombination: i,
         outputCombination: i,
         weight: 0.5,
-        rotor: this.id
+        rotor: this.id,
+        createdAt: Date.now() + i
       })
       crosswires.push(crosswire.id)
     }

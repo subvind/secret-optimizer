@@ -29,9 +29,13 @@ export default {
       ref: 'machine',
       type: 'string'
     },
+    createdAt: {
+      type: 'number'
+    }
   },
-  required: ['id', 'seed', 'targetCrosswireCount', 'machine'],
+  required: ['id', 'seed', 'targetCrosswireCount', 'machine', 'createdAt'],
   indexes: [
-    ['seed', 'machine']
+    ['seed', 'machine'],
+    'createdAt',
   ]
 }

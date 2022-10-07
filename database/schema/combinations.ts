@@ -19,11 +19,15 @@ export default {
       ref: 'machine',
       type: 'string'
     },
+    createdAt: {
+      type: 'number'
+    }
   },
-  required: ['id', 'letter', 'number', 'machine'],
+  required: ['id', 'letter', 'number', 'machine', 'createdAt'],
   indexes: [
     'machine',
     ['letter', 'machine'],
     ['number', 'machine'],
+    'createdAt',
   ]
 }

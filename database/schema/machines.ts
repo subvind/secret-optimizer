@@ -59,9 +59,13 @@ export default {
       ref: 'reflector',
       type: 'string'
     },
+    createdAt: {
+      type: 'number'
+    }
   },
-  required: ['id', 'seed', 'alphabet', 'quorum', 'targetCombinationCount', 'targetRotorCount'],
+  required: ['id', 'seed', 'alphabet', 'quorum', 'targetCombinationCount', 'targetRotorCount', 'createdAt'],
   indexes: [
-    ['seed', 'quorum']
+    ['seed', 'quorum'],
+    'createdAt',
   ]
 }

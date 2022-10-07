@@ -7,44 +7,49 @@ export default {
     let streams = chunks.split(' ')
     let that = this
 
-    let code = []
-    streams.forEach(async (stream) => {
-      let code = await that.stream(db, stream)
-      code.push(code)
-    })
+    let messages = []
+    for (const stream of streams) {
+      let value = await that.stream(db, stream)
+      messages.push(value)
+    }
 
     let scrambled = []
-    code.forEach((value, index) => {
+    messages.forEach((value, index) => {
       scrambled.push(value.scrambled)
     })
 
     return {
       original: chunks,
       scrambled: scrambled.join(' '),
-      code
+      messages
     }
   },
   async stream (db: any, chunk: string) {
     let letters = chunk.split('')
     let code = []
     let that = this
-    letters.forEach(async (letter, index) => {
+      
+    let index = 0
+    for (const letter of letters) {
+      index++ // for every letter
+
       // any letter a-z
       let plainText: string = letter // 1 char limit
-      console.log('plainText', plainText)
+      // console.log('plainText', plainText) // noisy
     
-      let encrypted = await that.encrypt(db, index, plainText)
-      console.log('encrypted', encrypted)
+      let keyPressCount = index
+      let encrypted = await that.encrypt(db, keyPressCount, plainText)
+      // console.log('encrypted', encrypted) // noisy
     
-      let decrypted = await that.decrypt(db, index, plainText)
-      console.log('decrypted', decrypted)
+      let decrypted = await that.decrypt(db, keyPressCount, plainText)
+      // console.log('decrypted', decrypted) // noisy
 
       code.push({
         plainText,
         encrypted,
         decrypted
       })
-    })
+    }
 
     let scrambled = []
     code.forEach((value, index) => {
@@ -80,12 +85,12 @@ export default {
         }
       })
 
-      console.log('encrypt', keyPressCount, combination.id)
+      // console.log('encrypt', keyPressCount, combination.id) // noisy
       await this.scramble(db)
       await this.processMessage(db)
     }
 
-    return this.output
+    return 'b'
   },
   async encrypt(db: any, keyPressCount: number, letter: string) {
     return await this.cipher(db, keyPressCount, letter)
@@ -115,16 +120,19 @@ export default {
       selector: {
         seed: this.seed,
         machine: this.id
-      }
+      },
+      sort: [
+        { createdAt: 'asc' } // always start in this order
+      ]
     }).exec()
     
     // randomly order rotors
     let rng = seedrandom.xor4096(`rotors:${this.seed}:${this.keyPressCount}`)
     if (machineRotors) {
-      machineRotors.forEach(async (rotor) => {
+      for (const rotor of machineRotors) {
         let query = db.rotors.findOne({
           selector: {
-            id: rotor
+            id: rotor.id
           }
         })
         await query.update({
@@ -134,9 +142,11 @@ export default {
         })
 
         await rotor.scramble(db)
-      });
+        // console.log('scramble rotor', rotor.id) // noisy
+      }
     }
-    console.log('scramble rotors', this.id)
+    
+    console.log('scrambled machine', this.id)
   },
   processMessage: async function (db: any) {
     // start from keyboard
@@ -146,6 +156,7 @@ export default {
     // send through rotors desc
     // send through plugboard
     // end at lightboard
+    return
   },
   cleanupCombinations: async function (db: any) {
     let query = db.combinations.find({
@@ -162,15 +173,19 @@ export default {
     
     // create combinations
     let chars = this.alphabet.split('')
-    await Promise.all(chars.map(async (char, index) => {
+
+    let index = 0
+    for (const char of chars) {
+      index++ // increase per letter
       let combination = await db.combinations.insert({
         id: uuidv4(),
         letter: char,
         number: index + 1,
-        machine: this.id
+        machine: this.id,
+        createdAt: Date.now() + index
       })
       combinations.push(combination.id)
-    }));
+    }
     // console.log('machine', this.id, 'combinations', combinations)
 
     // add combinations to machine list
@@ -206,7 +221,8 @@ export default {
         id: uuidv4(),
         seed: this.seed,
         machine: this.id,
-        targetCrosswireCount: this.targetCombinationCount
+        targetCrosswireCount: this.targetCombinationCount,
+        createdAt: Date.now() + i
       })
       await rotor.initCrosswires(db)
       rotors.push(rotor.id)

@@ -5,6 +5,14 @@ let main = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^
 
 export default {
   bestMachine: async function(db: any) {
+    return await db.machines.findOne({
+      selector: {
+        quorum: this.id
+      },
+      sort: [
+        { createdAt: 'asc' } // always start in this order
+      ]
+    }).exec()
     
   },
   cleanupMachines: async function (db: any) {
@@ -29,6 +37,7 @@ export default {
         quorum: this.id,
         targetCombinationCount: this.targetCombinationCount,
         targetRotorCount: this.targetRotorCount,
+        createdAt: Date.now() + i
       })
       await machine.initCombinations(db)
       await machine.initRotors(db)

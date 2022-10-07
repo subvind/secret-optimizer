@@ -26,12 +26,16 @@ export default {
     rotor: {
       ref: 'rotor',
       type: 'string'
+    },
+    createdAt: {
+      type: 'number'
     }
   },
-  required: ['id', 'order', 'inputCombination', 'outputCombination', 'weight', 'rotor'],
+  required: ['id', 'order', 'inputCombination', 'outputCombination', 'weight', 'rotor', 'createdAt'],
   indexes: [
     'rotor',
     ['inputCombination', 'rotor'],
-    ['outputCombination', 'rotor']
+    ['outputCombination', 'rotor'],
+    'createdAt',
   ]
 }
