@@ -36,7 +36,7 @@ async function build (topSecret: string, machineCount: number, rotorCount: numbe
   let machine = await quorum.bestMachine(db)
 
   // must be letters seperated by spaces
-  let message = 'hello world from austin texas'
+  let message = 'hello world from austin texas' // 5.5.4.6.5
   let value = await machine.channel(db, message)
 
   console.log('secretMessage', value)
