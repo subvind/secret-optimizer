@@ -4,6 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 let main = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()' 
 
 export default {
+  bestMachine: async function(db: any) {
+    
+  },
   cleanupMachines: async function (db: any) {
     let query = db.machines.find({
       selector: {

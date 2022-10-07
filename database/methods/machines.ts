@@ -3,18 +3,40 @@ import { v4 as uuidv4 } from 'uuid';
 import seedrandom from 'seedrandom'
 
 export default {
-  async stream (db: any, machine: any, chunk: string) {
+  async channel (db: any, chunks: string) {
+    let streams = chunks.split(' ')
+    let that = this
+
+    let code = []
+    streams.forEach(async (stream) => {
+      let code = await that.stream(db, stream)
+      code.push(code)
+    })
+
+    let scrambled = []
+    code.forEach((value, index) => {
+      scrambled.push(value.scrambled)
+    })
+
+    return {
+      original: chunks,
+      scrambled: scrambled.join(' '),
+      code
+    }
+  },
+  async stream (db: any, chunk: string) {
     let letters = chunk.split('')
     let code = []
-    letters.forEach((letter, index) => {
+    let that = this
+    letters.forEach(async (letter, index) => {
       // any letter a-z
       let plainText: string = letter // 1 char limit
       console.log('plainText', plainText)
     
-      let encrypted = machine.encrypt(db, index, plainText)
+      let encrypted = await that.encrypt(db, index, plainText)
       console.log('encrypted', encrypted)
     
-      let decrypted = machine.decrypt(db, index, plainText)
+      let decrypted = await that.decrypt(db, index, plainText)
       console.log('decrypted', decrypted)
 
       code.push({

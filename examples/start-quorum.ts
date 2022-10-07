@@ -26,29 +26,18 @@ async function build (topSecret: string, machineCount: number, rotorCount: numbe
   return quorum
 }
 
-async function getMachine (id: string) {
-  let db = await highlyScrambled.db()
-
-  return await db.machines.findOne(id).exec()
-}
-
-async function stream (machine: any, chunk: string) {
-  let db = await highlyScrambled.db()
-  
-  return await machine.stream(db, machine, chunk)
-}
-
 // required storage system
 (async function () {
   let database = await highlyScrambled.database(com.database.server)
+  let db = await highlyScrambled.db()
 
   let quorum = await build('isTrav', 1, 26, 26)
 
-  let machineId = quorum.machines[0]
-  let machine = await getMachine(machineId)
+  let machine = await quorum.bestMachine(db)
 
-  let message = 'hello'
-  let value = await stream(machine, message)
+  // must be letters seperated by spaces
+  let message = 'hello world from austin texas'
+  let value = await machine.channel(db, message)
 
   console.log('secretMessage', value)
 })()
