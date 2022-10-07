@@ -3,13 +3,18 @@ import { v4 as uuidv4 } from 'uuid';
 import seedrandom from 'seedrandom'
 
 export default {
+  /**
+   * a way to transmit words within a sentence
+   */
   async channel (db: any, chunks: string) {
     let streams = chunks.split(' ')
     let that = this
 
     let messages = []
+    let index: number = 0
     for (const stream of streams) {
-      let value = await that.stream(db, stream)
+      index++ // for every stream
+      let value = await that.stream(db, stream, index)
       messages.push(value)
     }
 
@@ -24,7 +29,10 @@ export default {
       messages
     }
   },
-  async stream (db: any, chunk: string) {
+  /**
+   * a way to transmit letters within a word
+   */
+  async stream (db: any, chunk: string, channelIndex: number) {
     let letters = chunk.split('')
     let code = []
     let that = this
@@ -38,10 +46,10 @@ export default {
       // console.log('plainText', plainText) // noisy
     
       let keyPressCount = index
-      let encrypted = await that.encrypt(db, keyPressCount, plainText)
+      let encrypted = await that.encrypt(db, channelIndex, keyPressCount, plainText)
       // console.log('encrypted', encrypted) // noisy
     
-      let decrypted = await that.decrypt(db, keyPressCount, plainText)
+      let decrypted = await that.decrypt(db, channelIndex, keyPressCount, plainText)
       // console.log('decrypted', decrypted) // noisy
 
       code.push({
@@ -62,7 +70,10 @@ export default {
       code
     }
   },
-  async cipher(db: any, keyPressCount: number, letter: string) {
+  /**
+   * a way to transform 1 letter into another letter 
+   */
+  async cipher(db: any, channelIndex: number, keyPressCount: number, letter: string) {
     // find out what combination this letter is
     let combination = await db.combinations.findOne({
       selector: {
@@ -81,6 +92,7 @@ export default {
       await query.update({
         $set: {
           input: combination.id,
+          channelIndex: channelIndex,
           keyPressCount: keyPressCount
         }
       })
@@ -92,11 +104,11 @@ export default {
 
     return 'b'
   },
-  async encrypt(db: any, keyPressCount: number, letter: string) {
-    return await this.cipher(db, keyPressCount, letter)
+  async encrypt(db: any, channelIndex: number, keyPressCount: number, letter: string) {
+    return await this.cipher(db, channelIndex, keyPressCount, letter)
   },
-  async decrypt(db: any, keyPressCount: number, letter: string) {
-    return await this.cipher(db, keyPressCount, letter)
+  async decrypt(db: any, channelIndex: number, keyPressCount: number, letter: string) {
+    return await this.cipher(db, channelIndex, keyPressCount, letter)
   },
   resetKeyPressCount: async function(db: any) {
     // reset key press counter back to 0
@@ -115,6 +127,9 @@ export default {
     // then update crosswires
     await this.scramble(db)
   },
+  /**
+   * a way to randomly organize things
+   */
   scramble: async function (db: any) {
     let machineRotors = await db.rotors.find({
       selector: {
@@ -127,7 +142,7 @@ export default {
     }).exec()
     
     // randomly order rotors
-    let rng = seedrandom.xor4096(`rotors:${this.seed}:${this.keyPressCount}`)
+    let rng = seedrandom.xor4096(`rotors:${this.seed}:${this.channelIndex}:${this.keyPressCount}`)
     if (machineRotors) {
       for (const rotor of machineRotors) {
         let query = db.rotors.findOne({
@@ -137,7 +152,8 @@ export default {
         })
         await query.update({
           $set: {
-            order: rng()
+            order: rng(),
+            channelIndex: this.channelIndex
           }
         })
 

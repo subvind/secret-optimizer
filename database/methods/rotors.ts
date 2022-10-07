@@ -3,6 +3,9 @@ import { v4 as uuidv4 } from 'uuid';
 import seedrandom from 'seedrandom'
 
 export default {
+  /**
+   * a way to randomly organize things
+   */
   scramble: async function (db: any) {
     // scramble crosswires
     let rotorCrosswires = await db.crosswires.find({
@@ -16,7 +19,7 @@ export default {
     }).exec()
 
     // randomly order crosswires
-    let rng = seedrandom.xor4096(`crosswires:${this.seed}:${this.keyPressCount}`)
+    let rng = seedrandom.xor4096(`crosswires:${this.seed}:${this.channelIndex}:${this.keyPressCount}`)
     if (rotorCrosswires) {
       for (const crosswire of rotorCrosswires) {
         let query = db.crosswires.findOne({
