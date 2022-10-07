@@ -24,7 +24,9 @@ export default {
     let machine = await db.machines.findOne(this.machine).exec() 
     let quorum = await db.quorums.findOne(machine.quorum).exec()
     let environment = `${quorum.environment.galaxy}:${quorum.environment.star}:${quorum.environment.core}`
-    let rng = seedrandom.xor4096(`${this.seed}:${environment}:machine-${machine.order}:rotor-${this.order}:${this.channelIndex}:${machine.keyPressCount}`)
+    let seed = `${this.seed}:${environment}:machine-${machine.order}:rotor-${this.order}:${this.channelIndex}:${machine.keyPressCount}`
+    let rng = seedrandom.xor4096(seed)
+    // console.log(seed, rng) // noisy
     if (rotorCrosswires) {
       for (const crosswire of rotorCrosswires) {
         let query = db.crosswires.findOne({
@@ -84,6 +86,6 @@ export default {
       }
     })
 
-    console.log('initCrosswires', 'rotor', this.id)
+    // console.log('initCrosswires', 'rotor', this.id) // noisy
   }
 }

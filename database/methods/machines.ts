@@ -49,13 +49,13 @@ export default {
       let encrypted = await that.encrypt(db, channelIndex, keyPressCount, plainText)
       // console.log('encrypted', encrypted) // noisy
     
-      let decrypted = await that.decrypt(db, channelIndex, keyPressCount, plainText)
-      // console.log('decrypted', decrypted) // noisy
+      // todo: leave this out for speed and move to a different mothod
+      // let decrypted = await that.decrypt(db, channelIndex, keyPressCount, plainText)
+      // // console.log('decrypted', decrypted) // noisy
 
       code.push({
         plainText,
-        encrypted,
-        decrypted
+        encrypted
       })
     }
 
@@ -144,7 +144,9 @@ export default {
     // randomly order rotors
     let quorum = await db.quorums.findOne(this.quorum).exec()
     let environment = `${quorum.environment.galaxy}:${quorum.environment.star}:${quorum.environment.core}`
-    let rng = seedrandom.xor4096(`${this.seed}:${environment}:machine-${this.order}:${this.channelIndex}:${this.keyPressCount}`)
+    let seed = `${this.seed}:${environment}:machine-${this.order}:${this.channelIndex}:${this.keyPressCount}`
+    let rng = seedrandom.xor4096(seed)
+    console.log(seed)
     if (machineRotors) {
       for (const rotor of machineRotors) {
         let query = db.rotors.findOne({
@@ -163,8 +165,6 @@ export default {
         // console.log('scramble rotor', rotor.id) // noisy
       }
     }
-    
-    console.log('scrambled machine', this.id)
   },
   processMessage: async function (db: any) {
     // start from keyboard
@@ -268,6 +268,6 @@ export default {
       }
     })
 
-    console.log('intiRotors', 'machine', this.id)
+    console.log('initRotors', 'machine', this.id)
   }
 }

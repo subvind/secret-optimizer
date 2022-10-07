@@ -1,6 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import com from '../index'
 
+// not recomended
+require('events').EventEmitter.prototype._maxListeners = 250;
+
 // use library
 let highlyScrambled = com.HighlyScrambled.getInstance()
 
