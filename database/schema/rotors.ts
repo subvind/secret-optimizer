@@ -14,6 +14,10 @@ export default {
       type: 'number',
       default: 0
     },
+    shift: {
+      type: 'number',
+      default: 0
+    },
     order: {
       type: 'number',
       default: 0.5

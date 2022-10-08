@@ -140,6 +140,10 @@ export default {
         { createdAt: 'asc' } // always start in this order
       ]
     }).exec()
+
+    function randomIntFromInterval(randomSpin, min, max) { // min and max included 
+      return Math.floor(randomSpin * (max - min + 1) + min)
+    }
     
     // randomly order rotors
     let quorum = await db.quorums.findOne(this.quorum).exec()
@@ -157,7 +161,8 @@ export default {
         await query.update({
           $set: {
             order: rng(),
-            channelIndex: this.channelIndex
+            channelIndex: this.channelIndex,
+            shift: randomIntFromInterval(rng(), 1, this.targetCombinationCount) - 1 // random spin: pick a number between 0 (min) and X (max) of total combinations
           }
         })
 
