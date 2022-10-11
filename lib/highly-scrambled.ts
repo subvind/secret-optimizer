@@ -1,10 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
-import machines from '../database/schema/machines';
 import { version } from '../package.json';
+import jkstra from 'jkstra'
 
 export class HighlyScrambled {
   private rxdb: any = null;
   private static instance: HighlyScrambled;
+  private machineGraphs: Array<jkstra.Graph> = []
 
   private constructor() {}
 
@@ -40,7 +41,24 @@ export class HighlyScrambled {
     return this.rxdb
   }
 
-  calculate(machineId: string) {
+  // blueprint and structure
+  createMachineGraph (machine: any) {
+    var graph = new jkstra.Graph();
+
+    let machineGraphs = this.machineGraphs.filter((value, index) => {
+      return value.blueprint !== machine.id
+    })
+    
+    let machineGraph = {
+      blueprint: machine.id,
+      structure: graph
+    }
+    machineGraphs.push(machineGraph)
+    this.machineGraphs = machineGraphs
+    return machineGraph
+  }
+
+  calculate(machineGraph: string) {
     let that = this
     return {
       encode(text: string) {

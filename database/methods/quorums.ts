@@ -47,6 +47,8 @@ export default {
       })
       await machine.initCombinations(db)
       await machine.initRotors(db)
+      await machine.initReflector(db)
+      await machine.initPlugboard(db)
       machines.push(machine.id)
     }
     // console.log('quorum', this.id, 'machines', machines)

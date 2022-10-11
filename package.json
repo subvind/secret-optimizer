@@ -13,6 +13,7 @@
     "tests": "ts-node tests.ts"
   },
   "dependencies": {
+    "jkstra": "^0.1.1",
     "leveldown": "^6.1.1",
     "pouchdb-adapter-idb": "^7.3.0",
     "pouchdb-adapter-leveldb": "^7.3.0",

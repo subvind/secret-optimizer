@@ -1,8 +1,89 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import seedrandom from 'seedrandom'
+import com from '../../index'
 
 export default {
+  /**
+   * from blueprints to graph
+   */
+  async assemble (db: any) {
+    let highlyScrambled = com.HighlyScrambled.getInstance()
+
+    let machineGraph = await highlyScrambled.createMachineGraph(this)
+
+    /**
+     * rotors from right to left
+     */
+    let rotorsRTL = await db.rotors.find({
+      selector: {
+        seed: this.seed,
+        machine: this.id
+      },
+      sort: [
+        { order: 'desc' } // always start in this order
+      ]
+    }).exec()
+
+    if (rotorsRTL) {
+      let direction = true
+      for (const rotor of rotorsRTL) {
+        await rotor.assemble(db, machineGraph, direction)
+      }
+    }
+
+    /**
+     * rotors from left to right
+     */
+    let rotorsLTR = await db.rotors.find({
+      selector: {
+        seed: this.seed,
+        machine: this.id
+      },
+      sort: [
+        { order: 'asc' } // always start in this order
+      ]
+    }).exec()
+
+    if (rotorsLTR) {
+      let direction = false
+      for (const rotor of rotorsLTR) {
+        await rotor.assemble(db, machineGraph, direction)
+      }
+    }
+
+    /**
+     * reflector
+     */
+    let reflector = await db.reflectors.findOne({
+      selector: {
+        seed: this.seed,
+        machine: this.id
+      }
+    }).exec()
+
+    if (reflector) {
+      await reflector.assemble(db, machineGraph)
+    }
+
+    /**
+     * plugboard
+     */
+     let plugboard = await db.plugboards.findOne({
+      selector: {
+        seed: this.seed,
+        machine: this.id
+      }
+    }).exec()
+
+    if (plugboard) {
+      await plugboard.assemble(db, machineGraph)
+    }
+
+
+
+  },
+
   /**
    * a way to transmit words within a sentence
    */
@@ -99,6 +180,7 @@ export default {
 
       // console.log('encrypt', keyPressCount, combination.id) // noisy
       await this.scramble(db)
+      await this.assemble(db)
       await this.processMessage(db)
     }
 
@@ -274,5 +356,51 @@ export default {
     })
 
     console.log('initRotors', 'machine', this.id)
+  },
+  initReflector: async function (db: any) {
+    // create reflector
+    let reflector = db.reflectors.insert({
+      id: uuidv4(),
+      seed: this.seed,
+      targetCombinationCount: this.targetCombinationCount,
+      machine: this.id,
+    })
+
+    // add reflector to machine
+    let query = db.machines.find({
+      selector: {
+        id: this.id
+      }
+    })
+    await query.update({
+      $set: {
+        reflector: reflector.id
+      }
+    })
+
+    console.log('initReflector', 'machine', this.id)
+  },
+  initPlugboard: async function (db: any) {
+    // create plugboard
+    let plugboard = db.plugboards.insert({
+      id: uuidv4(),
+      seed: this.seed,
+      targetCombinationCount: this.targetCombinationCount,
+      machine: this.id,
+    })
+
+    // add plugboard to machine
+    let query = db.machines.find({
+      selector: {
+        id: this.id
+      }
+    })
+    await query.update({
+      $set: {
+        plugboard: plugboard.id
+      }
+    })
+
+    console.log('initPlugboard', 'machine', this.id)
   }
 }
