@@ -6,7 +6,7 @@ import jkstra from 'jkstra'
 
 export default {
   /**
-   * from blueprints to working concept
+   * from blueprints to concrete concept
    */
   async assemble (db: any) {
     let highlyScrambled = com.HighlyScrambled.getInstance()
@@ -15,14 +15,14 @@ export default {
     /**
      * begin: 0
      */
-     mechanics.nodes.push(
+    mechanics.nodes.push(
       mechanics.structure.addVertex({ id: uuidv4(), length: 0, part: "genesis" })
     );
 
     /**
      * end: 1
      */
-     mechanics.nodes.push(
+    mechanics.nodes.push(
       mechanics.structure.addVertex({ id: uuidv4(), length: Infinity, part: "infinity" })
     );
 
@@ -117,10 +117,8 @@ export default {
     }
 
     /**
-     * bundle parts
+     * parts connected
      */
-
-
     return mechanics
   },
 
