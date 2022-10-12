@@ -78,24 +78,30 @@ export default {
     }
 
     // connect secondLevel to enterRotor
-    // DOING
-
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
         plugboardId: secondLevelPorts[i].combination.id,
         rotorGatewayId: enterRotor.crosswire.id,
-        length: right[i].crosswire.length + enterRotor.crosswire.length,
+        length: 0,
         type: 'gateway'
       }
       mechanics.nodes.push(
-        mechanics.structure.addEdge(right[i].node, left[i].node, edge)
+        mechanics.structure.addEdge(secondLevelPorts[i].node, enterRotor[i].node, edge)
       );
     }
 
-
     // connect exitRotor to secondLevel
-
-    // TODO
+    for (let i = 0; i < this.targetCombinationCount; i++) {
+      let edge = {
+        plugboardId: secondLevelPorts[i].combination.id,
+        rotorGatewayId: enterRotor.crosswire.id,
+        length: 0,
+        type: 'gateway'
+      }
+      mechanics.nodes.push(
+        mechanics.structure.addEdge(enterRotor.node, secondLevelPorts[i].node, edge)
+      );
+    }
 
     // connect secondLevel to firstLevel
     for (let i = 0; i < this.targetCombinationCount; i++) {
