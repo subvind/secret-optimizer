@@ -43,16 +43,17 @@ export default {
     
     let enterRotor
     let inRotor
+    let spunRotorsRTL
     if (rotorsRTL) {
-      let direction = true // signals go inward to reflector
       let index = 0
       for (const rotor of rotorsRTL) {
-        let part = await rotor.assemble(db, mechanics, direction, index, rotorsRTL)
+        let part = await rotor.assemble(db, mechanics)
         if (index === 0) {
           enterRotor = part // first rotor
         } else if (index === rotorsRTL.length - 1) {
           inRotor = part // last rotor
         }
+        spunRotorsRTL.push(part)
         index++
       }
     }
@@ -72,16 +73,17 @@ export default {
 
     let outRotor
     let exitRotor
+    let spunRotorsLTR
     if (rotorsLTR) {
-      let direction = false // signals go outward from reflector
       let index = 0
       for (const rotor of rotorsLTR) {
-        let part = await rotor.assemble(db, mechanics, direction, index, rotorsLTR)
+        let part = await rotor.assemble(db, mechanics)
         if (index === 0) {
           outRotor = part // first rotor
         } else if (index === rotorsLTR.length - 1) {
           exitRotor = part // last rotor
         }
+        spunRotorsLTR.push(part)
         index++
       }
     }
@@ -112,6 +114,66 @@ export default {
 
     if (plugboard) {
       await plugboard.assemble(db, mechanics, enterRotor, exitRotor)
+    }
+
+    /**
+     * link rotors: outbound
+     */
+    for (let i = 0; i < this.targetRotorCount; i++) {
+      let right
+      let left
+      if (i === 0) {
+        // first rotor passing signals from plugboard
+        right = spunRotorsRTL[i].rotorLeftPorts
+        left = spunRotorsRTL[i + 1].rotorRightPorts
+      } else {
+        // all the other rotors
+        right = spunRotorsRTL[i - 1].rotorLeftPorts
+        left = spunRotorsRTL[i].rotorRightPorts
+      }
+
+      // link crosswires
+      for (let i = 0; i < this.targetCombinationCount; i++) {
+        let edge = {
+          rightId: right[i].crosswire.id,
+          leftId: left[i].crosswire.id,
+          length: right[i].crosswire.length + left[i].crosswire.length,
+          type: 'link'
+        }
+        mechanics.nodes.push(
+          mechanics.structure.addEdge(right[i].node, left[i].node, edge)
+        );
+      }
+    }
+
+    /**
+     * link rotors: inbound
+     */
+    for (let i = 0; i < this.targetRotorCount; i++) {
+      let left
+      let right
+      if (i === 0) {
+        // first rotor passing signals to plugboard
+        left = spunRotorsLTR[i].rotorRightPorts
+        right = spunRotorsLTR[i + 1].rotorLeftPorts
+      } else {
+        // all the other rotors
+        left = spunRotorsLTR[i - 1].rotorRightPorts
+        right = spunRotorsLTR[i].rotorLeftPorts
+      }
+
+      // link crosswires
+      for (let i = 0; i < this.targetCombinationCount; i++) {
+        let edge = {
+          leftId: left[i].crosswire.id,
+          rightId: right[i].crosswire.id,
+          length: left[i].crosswire.length + right[i].crosswire.length,
+          type: 'link'
+        }
+        mechanics.nodes.push(
+          mechanics.structure.addEdge(left[i].node, right[i].node, edge)
+        );
+      }
     }
 
     /**
@@ -282,7 +344,8 @@ export default {
           $set: {
             order: rng(),
             channelIndex: this.channelIndex,
-            shift: randomIntFromInterval(rng(), 1, this.targetCombinationCount) - 1 // random spin: pick a number between 0 (min) and X (max) of total combinations
+            shift: randomIntFromInterval(rng(), 1, this.targetCombinationCount) - 1, // random spin: pick a number between 0 (min) and X (max) of total combinations
+            direction: Boolean(randomIntFromInterval(rng(), 0, 1))
           }
         })
 

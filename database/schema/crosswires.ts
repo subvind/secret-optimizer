@@ -19,7 +19,7 @@ export default {
       ref: 'combination',
       type: 'string'
     },
-    weight: {
+    length: {
       type: 'number',
       default: 1
     },
@@ -31,7 +31,7 @@ export default {
       type: 'number'
     }
   },
-  required: ['id', 'order', 'inputCombination', 'outputCombination', 'weight', 'rotor', 'createdAt'],
+  required: ['id', 'order', 'inputCombination', 'outputCombination', 'length', 'rotor', 'createdAt'],
   indexes: [
     'rotor',
     ['inputCombination', 'rotor'],

@@ -14,6 +14,10 @@ export default {
       type: 'number',
       default: 0
     },
+    direction: {
+      type: 'boolean',
+      default: false
+    },
     shift: {
       type: 'number',
       default: 0

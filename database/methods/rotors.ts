@@ -6,8 +6,72 @@ export default {
   /**
    * from blueprints to concrete concept
    */
-  assemble: async function (db: any, mechanics: any, direction: boolean, index: number, rotors: any) {
-    
+  assemble: async function (db: any, mechanics: any) {
+    // these crosswires
+    let rotorCrosswires = await db.crosswires.find({
+      selector: {
+        seed: this.seed,
+        rotor: this.id
+      },
+      sort: [
+        { order: 'asc' } // always start in this order
+      ]
+    }).exec()
+
+    // make nodes
+    let rotorRightPorts = []
+    let rotorLeftPorts = []
+
+    for (let i = 0; i < this.targetCrosswireCount; i++) {
+      rotorRightPorts.push(
+        {
+          crosswire: rotorCrosswires[i],
+          node: mechanics.structure.addVertex({ id: rotorCrosswires[i].id, part: "port" }),
+        }
+      );
+      rotorLeftPorts.push(
+        {
+          crosswire: rotorCrosswires[i],
+          node: mechanics.structure.addVertex({ id: rotorCrosswires[i].id ,part: "port" }),
+        }
+      );
+    }
+
+    // align nodes by
+    // spin rotors by shift and direction
+    function arrayRotate(arr, reverse, count) {
+      for (let i = 0; 0 < count; i++) {
+        if (reverse) {
+          arr.unshift(arr.pop());
+        } else {
+          arr.push(arr.shift());
+        }
+      }
+      return arr;
+    }
+    rotorRightPorts = arrayRotate(rotorRightPorts, this.direction, this.shift)
+    rotorLeftPorts = arrayRotate(rotorLeftPorts, this.direction, this.shift)
+    for (const port of rotorRightPorts) {
+      mechanics.nodes.push(port.node)
+    }
+    for (const port of rotorLeftPorts) {
+      mechanics.nodes.push(port.node)
+    }
+
+    // connect crosswires
+    for (let i = 0; i < this.targetCrosswireCount; i++) {
+      let edge = {
+        id: rotorCrosswires[i].id,
+        length: rotorCrosswires[i].length,
+        part: 'crosswire'
+      }
+      mechanics.structure.addEdge(rotorRightPorts[i].node, rotorLeftPorts[i].node, edge)
+    }
+
+    return {
+      rotorRightPorts,
+      rotorLeftPorts
+    }
   },
 
   /**
@@ -41,7 +105,8 @@ export default {
         })
         await query.update({
           $set: {
-            order: rng()
+            order: rng(),
+            length: rng(),
           }
         })
       }
@@ -71,7 +136,7 @@ export default {
         id: uuidv4(),
         inputCombination: i,
         outputCombination: i,
-        weight: 0.5,
+        length: 0.5,
         rotor: this.id,
         createdAt: Date.now() + i
       })
