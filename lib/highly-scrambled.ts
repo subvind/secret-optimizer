@@ -5,7 +5,7 @@ import jkstra from 'jkstra'
 export class HighlyScrambled {
   private rxdb: any = null;
   private static instance: HighlyScrambled;
-  private machineGraphs: Array<jkstra.Graph> = []
+  private mechanics: Array<any> = []
 
   private constructor() {}
 
@@ -42,20 +42,30 @@ export class HighlyScrambled {
   }
 
   // blueprint and structure
-  createMachineGraph (machine: any) {
+  createMechanics (machine: any) {
     var graph = new jkstra.Graph();
 
-    let machineGraphs = this.machineGraphs.filter((value, index) => {
+    let mechanics = this.mechanics.filter((value, index) => {
       return value.blueprint !== machine.id
     })
     
-    let machineGraph = {
+    let workingParts = {
       blueprint: machine.id,
-      structure: graph
+      structure: graph,
+      nodes: [],
+      completeId: 1,
     }
-    machineGraphs.push(machineGraph)
-    this.machineGraphs = machineGraphs
-    return machineGraph
+    mechanics.push(workingParts)
+    this.mechanics = mechanics
+    return workingParts
+  }
+
+  getMechanics (machine: any) {
+    let mechanics = this.mechanics.filter((value, index) => {
+      return value.blueprint === machine.id
+    })
+
+    return mechanics[0]
   }
 
   calculate(machineGraph: string) {

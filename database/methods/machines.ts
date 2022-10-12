@@ -2,15 +2,31 @@ import { v4 as uuidv4 } from 'uuid';
 
 import seedrandom from 'seedrandom'
 import com from '../../index'
+import jkstra from 'jkstra'
 
 export default {
   /**
-   * from blueprints to graph
+   * from blueprints to working concept
    */
   async assemble (db: any) {
     let highlyScrambled = com.HighlyScrambled.getInstance()
+    let mechanics = await highlyScrambled.createMechanics(this)
 
-    let machineGraph = await highlyScrambled.createMachineGraph(this)
+    /**
+     * begin: 0
+     */
+     mechanics.nodes.push(
+      mechanics.structure.addVertex({ id: uuidv4(), length: 0, part: "genesis" })
+    );
+
+    /**
+     * end: 1
+     */
+     mechanics.nodes.push(
+      mechanics.structure.addVertex({ id: uuidv4(), length: Infinity, part: "infinity" })
+    );
+
+    // fabric: 2, 3, 4...
 
     /**
      * rotors from right to left
@@ -21,14 +37,23 @@ export default {
         machine: this.id
       },
       sort: [
-        { order: 'desc' } // always start in this order
+        { order: 'desc' } // always start in this order for RTL
       ]
     }).exec()
-
+    
+    let enterRotor
+    let inRotor
     if (rotorsRTL) {
-      let direction = true
+      let direction = true // signals go inward to reflector
+      let index = 0
       for (const rotor of rotorsRTL) {
-        await rotor.assemble(db, machineGraph, direction)
+        let part = await rotor.assemble(db, mechanics, direction, index, rotorsRTL)
+        if (index === 0) {
+          enterRotor = part // first rotor
+        } else if (index === rotorsRTL.length - 1) {
+          inRotor = part // last rotor
+        }
+        index++
       }
     }
 
@@ -41,14 +66,23 @@ export default {
         machine: this.id
       },
       sort: [
-        { order: 'asc' } // always start in this order
+        { order: 'asc' } // always start in this order for LTR
       ]
     }).exec()
 
+    let outRotor
+    let exitRotor
     if (rotorsLTR) {
-      let direction = false
+      let direction = false // signals go outward from reflector
+      let index = 0
       for (const rotor of rotorsLTR) {
-        await rotor.assemble(db, machineGraph, direction)
+        let part = await rotor.assemble(db, mechanics, direction, index, rotorsLTR)
+        if (index === 0) {
+          outRotor = part // first rotor
+        } else if (index === rotorsLTR.length - 1) {
+          exitRotor = part // last rotor
+        }
+        index++
       }
     }
 
@@ -62,26 +96,32 @@ export default {
       }
     }).exec()
 
+    let mainReflector
     if (reflector) {
-      await reflector.assemble(db, machineGraph)
+      mainReflector = await reflector.assemble(db, mechanics, inRotor, outRotor)
     }
 
     /**
      * plugboard
      */
-     let plugboard = await db.plugboards.findOne({
+    let plugboard = await db.plugboards.findOne({
       selector: {
         seed: this.seed,
         machine: this.id
       }
     }).exec()
 
+    let mainPlugboard
     if (plugboard) {
-      await plugboard.assemble(db, machineGraph)
+      mainPlugboard = await plugboard.assemble(db, mechanics, enterRotor, exitRotor)
     }
 
+    /**
+     * bundle parts
+     */
 
 
+    return mechanics
   },
 
   /**
@@ -163,6 +203,7 @@ export default {
       }
     }).exec()
 
+    let ciphertext: string = ''
     if (combination) {
       // add details to machine
       let query = db.machines.find({
@@ -181,10 +222,10 @@ export default {
       // console.log('encrypt', keyPressCount, combination.id) // noisy
       await this.scramble(db)
       await this.assemble(db)
-      await this.processMessage(db)
+      ciphertext = await this.processMessage(db, letter)
     }
 
-    return 'b'
+    return ciphertext
   },
   async encrypt(db: any, channelIndex: number, keyPressCount: number, letter: string) {
     return await this.cipher(db, channelIndex, keyPressCount, letter)
@@ -253,15 +294,44 @@ export default {
       }
     }
   },
-  processMessage: async function (db: any) {
-    // start from keyboard
-    // send through plugboard
-    // send through rotors asc
-    // go through reflector
-    // send through rotors desc
-    // send through plugboard
-    // end at lightboard
-    return
+  processMessage: async function (db: any, letter: string) {
+    // grab machine from mechanics
+    let highlyScrambled = com.HighlyScrambled.getInstance()
+
+    let mechanics = await highlyScrambled.getMechanics(this)
+    // let workingParts = {
+    //   blueprint: machine.id,
+    //   structure: graph,
+    //   nodes: [],
+    //   completeId: 1,
+    // }
+    let dijkstra = new jkstra.algos.Dijkstra(mechanics.structure);
+
+    // find graph starting node based on letter
+    let startNode = mechanics.nodes.findIndex((value, index) => {
+      return value.keyboardLetter === letter
+    })
+
+    // computes the shortestPath between nodes 0 and 1,
+    // using the single number stored in each as its cost
+    let path = dijkstra.shortestPath(startNode, mechanics.completeId, {
+      edgeCost: function (e) {
+        return e.data.length;
+      },
+    });
+
+    // causeNode.data // => {id: 42, length: 0.5, keyboardLetter: 'a', part: 'plugboard'}
+    // effectNode.data // => {id: 1337, length: 0.5, lightboardLetter: 'a', part: 'plugboard'}
+    let route = path
+      .map(function (e) {
+        return e.data;
+      })
+      .join()
+
+    // the second to last node is our answer
+    let cipherNode = route[route.length - 2]
+
+    return cipherNode.lightboardLetter
   },
   cleanupCombinations: async function (db: any) {
     let oldCombinations = await db.combinations.find({

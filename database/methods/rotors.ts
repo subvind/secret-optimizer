@@ -4,6 +4,13 @@ import seedrandom from 'seedrandom'
 
 export default {
   /**
+   * from blueprints to graph
+   */
+  assemble: async function (db: any, machineGraph: any, direction: boolean) {
+    
+  },
+
+  /**
    * a way to randomly organize things
    */
   scramble: async function (db: any) {
