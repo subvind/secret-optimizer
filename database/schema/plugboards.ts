@@ -14,11 +14,23 @@ export default {
       type: 'number',
       default: 26
     },
+    firstLevelOrders: {
+      type: 'array',
+      items: {
+        type: 'number'
+      }
+    },
     firstLevelCombinations: {
       type: 'array',
       ref: 'combination',
       items: {
         type: 'string'
+      }
+    },
+    secondLevelOrders: {
+      type: 'array',
+      items: {
+        type: 'number'
       }
     },
     secondLevelCombinations: {

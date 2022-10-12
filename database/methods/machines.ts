@@ -16,14 +16,14 @@ export default {
      * begin: 0
      */
     mechanics.nodes.push(
-      mechanics.structure.addVertex({ id: uuidv4(), length: 0, part: "genesis" })
+      mechanics.structure.addVertex({ id: this.id, part: "genesis" })
     );
 
     /**
      * end: 1
      */
     mechanics.nodes.push(
-      mechanics.structure.addVertex({ id: uuidv4(), length: Infinity, part: "infinity" })
+      mechanics.structure.addVertex({ id: this.id, part: "infinity" })
     );
 
     // fabric: 2, 3, 4...
@@ -96,9 +96,8 @@ export default {
       }
     }).exec()
 
-    let mainReflector
     if (reflector) {
-      mainReflector = await reflector.assemble(db, mechanics, inRotor, outRotor)
+      await reflector.assemble(db, mechanics, inRotor, outRotor)
     }
 
     /**
@@ -111,9 +110,8 @@ export default {
       }
     }).exec()
 
-    let mainPlugboard
     if (plugboard) {
-      mainPlugboard = await plugboard.assemble(db, mechanics, enterRotor, exitRotor)
+      await plugboard.assemble(db, mechanics, enterRotor, exitRotor)
     }
 
     /**
@@ -252,6 +250,7 @@ export default {
    * a way to randomly organize things
    */
   scramble: async function (db: any) {
+    // scramble these rotors
     let machineRotors = await db.rotors.find({
       selector: {
         seed: this.seed,
@@ -291,6 +290,16 @@ export default {
         // console.log('scramble rotor', rotor.id) // noisy
       }
     }
+
+    // randomly arrange plugboard input/outout connections
+    let machinePlugboard = await db.plugboards.findOne({
+      selector: {
+        seed: this.seed,
+        machine: this.id
+      }
+    }).exec()
+
+    await machinePlugboard.scramble(db)
   },
   processMessage: async function (db: any, letter: string) {
     // grab machine from mechanics
@@ -317,9 +326,9 @@ export default {
         return e.data.length;
       },
     });
-
-    // causeNode.data // => {id: 42, length: 0.5, keyboardLetter: 'a', part: 'plugboard'}
-    // effectNode.data // => {id: 1337, length: 0.5, lightboardLetter: 'a', part: 'plugboard'}
+    
+    // causeEdge.data // => {length: 0.5, combination: {a}, part: 'keyboard'}
+    // effectEdge.data // => {length: 0.5, combination: {a}, part: 'lightboard'}
     let route = path
       .map(function (e) {
         return e.data;

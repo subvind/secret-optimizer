@@ -4,9 +4,9 @@ import seedrandom from 'seedrandom'
 
 export default {
   /**
-   * from blueprints to graph
+   * from blueprints to concrete concept
    */
-  assemble: async function (db: any, machineGraph: any, direction: boolean) {
+  assemble: async function (db: any, mechanics: any, direction: boolean, index: number, rotors: any) {
     
   },
 
@@ -14,9 +14,7 @@ export default {
    * a way to randomly organize things
    */
   scramble: async function (db: any) {
-    // 
-
-    // scramble crosswires
+    // scramble these crosswires
     let rotorCrosswires = await db.crosswires.find({
       selector: {
         seed: this.seed,
