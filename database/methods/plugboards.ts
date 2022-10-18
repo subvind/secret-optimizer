@@ -15,7 +15,7 @@ export default {
         machine: this.machine
       },
       sort: [
-        { order: 'asc' } // always start in this order
+        { createdAt: 'asc' } // always start in this order
       ]
     })
 
@@ -131,31 +131,30 @@ export default {
   },
   async scramble (db: any) {
     // randomly order firstLevelCombinations and secondLevelCombinations
-    let machine = await db.machine.findOne(this.machine).exec()
+    let machine = await db.machines.findOne(this.machine).exec()
     let quorum = await db.quorums.findOne(machine.quorum).exec()
     let environment = `${quorum.environment.galaxy}:${quorum.environment.star}:${quorum.environment.core}`
     let seed = `${this.seed}:${environment}:machine-${machine.order}:plugboard:${machine.channelIndex}:${machine.keyPressCount}`
     let rng = seedrandom.xor4096(seed)
     console.log(seed)
-    if (this.firstLevelCombinations.length) {
-      let firstLevelOrders = []
-      let secondLevelOrders = []
-      for (let i = 1; i <= this.targetCombinationCount; i++) {
-        firstLevelOrders.push(rng())
-        secondLevelOrders.push(rng())
-      }
-
-      let query = db.plugboards.findOne({
-        selector: {
-          id: this.id
-        }
-      })
-      await query.update({
-        $set: {
-          firstLevelOrders,
-          secondLevelOrders
-        }
-      })
+  
+    let firstLevelOrders = []
+    let secondLevelOrders = []
+    for (let i = 1; i <= this.targetCombinationCount; i++) {
+      firstLevelOrders.push(rng())
+      secondLevelOrders.push(rng())
     }
+
+    let query = db.plugboards.findOne({
+      selector: {
+        id: this.id
+      }
+    })
+    await query.update({
+      $set: {
+        firstLevelOrders,
+        secondLevelOrders
+      }
+    })
   }
 }
