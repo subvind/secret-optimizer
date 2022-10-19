@@ -14,20 +14,6 @@ export default {
       type: 'number',
       default: 26
     },
-    inputCombinations: {
-      type: 'array',
-      ref: 'combination',
-      items: {
-        type: 'string'
-      }
-    },
-    outputCombinations: {
-      type: 'array',
-      ref: 'combination',
-      items: {
-        type: 'string'
-      }
-    },
     machine: {
       ref: 'machine',
       type: 'string'

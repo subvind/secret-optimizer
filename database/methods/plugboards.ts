@@ -20,17 +20,33 @@ export default {
     }).exec()
 
     // make nodes
-    let firstLevelPorts = []
-    let secondLevelPorts = []
+    let firstLevelInputPorts = []
+    let secondLevelInputPorts = []
+    let firstLevelOutputPorts = []
+    let secondLevelOutputPorts = []
     for (let i = 0; i < this.targetCombinationCount; i++) {
-      firstLevelPorts.push(
+      firstLevelInputPorts.push(
         {
           order: this.firstLevelOrders[i],
           node: mechanics.structure.addVertex({ id: this.id, combination: combinations[i], level: 1, part: "plugboard" }),
           combination: combinations[i]
         }
       );
-      secondLevelPorts.push(
+      secondLevelInputPorts.push(
+        {
+          order: this.secondLevelOrders[i],
+          node: mechanics.structure.addVertex({ id: this.id, combination: combinations[i], level: 2, part: "plugboard" }),
+          combination: combinations[i]
+        }
+      );
+      firstLevelOutputPorts.push(
+        {
+          order: this.firstLevelOrders[i],
+          node: mechanics.structure.addVertex({ id: this.id, combination: combinations[i], level: 1, part: "plugboard" }),
+          combination: combinations[i]
+        }
+      );
+      secondLevelOutputPorts.push(
         {
           order: this.secondLevelOrders[i],
           node: mechanics.structure.addVertex({ id: this.id, combination: combinations[i], level: 2, part: "plugboard" }),
@@ -40,89 +56,105 @@ export default {
     }
 
     // align nodes
-    firstLevelPorts = firstLevelPorts.sort((a, b) => {
+    firstLevelInputPorts = firstLevelInputPorts.sort((a, b) => {
       return a.order - b.order
     })
-    secondLevelPorts = secondLevelPorts.sort((a, b) => {
+    secondLevelInputPorts = secondLevelInputPorts.sort((a, b) => {
       return a.order - b.order
     })
-    for (const firstLevel of firstLevelPorts) {
+    firstLevelOutputPorts = firstLevelOutputPorts.sort((a, b) => {
+      return a.order - b.order
+    })
+    secondLevelOutputPorts = secondLevelOutputPorts.sort((a, b) => {
+      return a.order - b.order
+    })
+    for (const firstLevel of firstLevelInputPorts) {
       mechanics.nodes.push(firstLevel.node)
     }
-    for (const secondLevel of secondLevelPorts) {
+    for (const firstLevel of firstLevelOutputPorts) {
+      mechanics.nodes.push(firstLevel.node)
+    }
+    // console.log('firstLevelInputPorts', mechanics.nodes.length)
+    for (const secondLevel of secondLevelInputPorts) {
       mechanics.nodes.push(secondLevel.node)
     }
+    for (const secondLevel of secondLevelOutputPorts) {
+      mechanics.nodes.push(secondLevel.node)
+    }
+    // console.log('secondLevelInputPorts', mechanics.nodes.length)
 
     // causeEdge.data // => {length: 0.5, combination: {a}, part: 'keyboard'}
     // effectEdge.data // => {length: 0.5, combination: {a}, part: 'lightboard'}
 
-    // connect beginning to firstLevel
+    // input connect beginning to firstLevel
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
         length: 0,
-        combination: combinations.filter((value) => { return value.id === firstLevelPorts[i].combination })[0],
+        combination: combinations.filter((value) => { return value.id === firstLevelInputPorts[i].combination })[0],
         part: 'keyboard'
       }
-      mechanics.structure.addEdge(mechanics.nodes[0], firstLevelPorts[i].node, edge);
+      mechanics.structure.addEdge(mechanics.nodes[0], firstLevelInputPorts[i].node, edge);
     }
 
-    // connect firstLevel to secondLevel
+    // input connect firstLevel to secondLevel
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
-        length: firstLevelPorts[i].order + secondLevelPorts[i].order,
-        from: firstLevelPorts[i].combination,
-        to: secondLevelPorts[i].combination,
+        length: firstLevelInputPorts[i].order + secondLevelInputPorts[i].order,
+        from: firstLevelInputPorts[i].combination,
+        to: secondLevelInputPorts[i].combination,
         part: 'plugboard'
       }
-      mechanics.structure.addEdge(firstLevelPorts[i].node, secondLevelPorts[i].node, edge);
+      mechanics.structure.addEdge(firstLevelInputPorts[i].node, secondLevelInputPorts[i].node, edge);
     }
 
-    // connect secondLevel to enterRotor
+    // input connect secondLevel to enterRotor
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
-        plugboardId: secondLevelPorts[i].combination.id,
+        plugboardId: secondLevelInputPorts[i].combination.id,
         rotorGatewayId: enterRotor.id,
         length: 0,
         part: 'gateway'
       }
-      mechanics.structure.addEdge(secondLevelPorts[i].node, enterRotor.rotorRightPorts[i].node, edge)
+      mechanics.structure.addEdge(secondLevelInputPorts[i].node, enterRotor.rotorRightPorts[i].node, edge)
     }
 
-    // connect exitRotor to secondLevel
+    // output connect exitRotor to secondLevel
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
-        plugboardId: secondLevelPorts[i].combination.id,
+        plugboardId: secondLevelOutputPorts[i].combination.id,
         rotorGatewayId: exitRotor.id,
         length: 0,
         part: 'gateway'
       }
-      mechanics.structure.addEdge(exitRotor.rotorLeftPorts[i].node, secondLevelPorts[i].node, edge)
+      mechanics.structure.addEdge(exitRotor.rotorLeftPorts[i].node, secondLevelOutputPorts[i].node, edge)
     }
 
-    // connect secondLevel to firstLevel
+    // output connect secondLevel to firstLevel
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
-        length: firstLevelPorts[i].order + secondLevelPorts[i].order,
-        from: secondLevelPorts[i].combination,
-        to: firstLevelPorts[i].combination,
+        length: firstLevelOutputPorts[i].order + secondLevelOutputPorts[i].order,
+        from: secondLevelOutputPorts[i].combination,
+        to: firstLevelOutputPorts[i].combination,
         part: 'plugboard'
       }
-      mechanics.structure.addEdge(secondLevelPorts[i].node, firstLevelPorts[i].node, edge);
+      mechanics.structure.addEdge(secondLevelOutputPorts[i].node, firstLevelOutputPorts[i].node, edge);
     }
 
-    // connect firstLevel to ending
+    // output connect firstLevel to ending
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
         length: 0,
-        combination: firstLevelPorts[i].combination,
+        combination: firstLevelOutputPorts[i].combination,
         part: 'lightboard'
       }
-      mechanics.structure.addEdge(firstLevelPorts[i].node, mechanics.nodes[1], edge);
+      mechanics.structure.addEdge(firstLevelOutputPorts[i].node, mechanics.nodes[1], edge);
     }
 
     return {
-      firstLevelPorts,
-      secondLevelPorts
+      firstLevelInputPorts,
+      secondLevelInputPorts,
+      firstLevelOutputPorts,
+      secondLevelOutputPorts
     }
   },
   async scramble (db: any) {

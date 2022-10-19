@@ -6,7 +6,7 @@ export default {
   /**
    * from blueprints to concrete concept
    */
-  assemble: async function (db: any, mechanics: any) {
+  assemble: async function (db: any, mechanics: any, direction: boolean) {
     // these crosswires
     let rotorCrosswires = await db.crosswires.find({
       selector: {
@@ -62,9 +62,11 @@ export default {
     for (const port of rotorRightPorts) {
       mechanics.nodes.push(port.node)
     }
+    console.log('rotorRightPorts', mechanics.nodes.length)
     for (const port of rotorLeftPorts) {
       mechanics.nodes.push(port.node)
     }
+    console.log('rotorLeftPorts', mechanics.nodes.length)
 
     // connect crosswires
     for (let i = 0; i < this.targetCrosswireCount; i++) {
@@ -73,7 +75,13 @@ export default {
         length: rotorCrosswires[i].length,
         part: 'crosswire'
       }
-      mechanics.structure.addEdge(rotorRightPorts[i].node, rotorLeftPorts[i].node, edge)
+      // true: flow is left to right
+      // false: flow is right to left
+      if (direction) {
+        mechanics.structure.addEdge(rotorLeftPorts[i].node, rotorRightPorts[i].node, edge)
+      } else {
+        mechanics.structure.addEdge(rotorRightPorts[i].node, rotorLeftPorts[i].node, edge)
+      }
     }
 
     return {

@@ -47,7 +47,7 @@ export default {
     if (rotorsRTL) {
       let index = 0
       for (const rotor of rotorsRTL) {
-        let part = await rotor.assemble(db, mechanics)
+        let part = await rotor.assemble(db, mechanics, false)
         if (index === 0) {
           enterRotor = part // first rotor
         } else if (index === rotorsRTL.length - 1) {
@@ -80,7 +80,7 @@ export default {
     if (rotorsLTR) {
       let index = 0
       for (const rotor of rotorsLTR) {
-        let part = await rotor.assemble(db, mechanics)
+        let part = await rotor.assemble(db, mechanics, true)
         if (index === 0) {
           outRotor = part // first rotor
         } else if (index === rotorsLTR.length - 1) {
@@ -146,9 +146,7 @@ export default {
           length: right[i].crosswire.length + left[i].crosswire.length,
           part: 'link'
         }
-        mechanics.nodes.push(
-          mechanics.structure.addEdge(right[i].node, left[i].node, edge)
-        );
+        mechanics.structure.addEdge(right[i].node, left[i].node, edge)
       }
     }
 
@@ -176,9 +174,7 @@ export default {
           length: left[i].crosswire.length + right[i].crosswire.length,
           part: 'link'
         }
-        mechanics.nodes.push(
-          mechanics.structure.addEdge(left[i].node, right[i].node, edge)
-        );
+        mechanics.structure.addEdge(left[i].node, right[i].node, edge)
       }
     }
 
@@ -398,7 +394,22 @@ export default {
 
     // computes the shortestPath between nodes 0 and 1,
     // using the single number stored in each as its cost
-    let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mechanics.completeId], {
+    // current: mechanics.nodes[startNode]
+    // target: mechanics.nodes[mechanics.completeId]
+    // firstLevelPorts 2732
+    // secondLevelPorts 2758
+    // left to right
+    // rotorRightPorts 28
+    // rotorLeftPorts 54
+    // rotorRightPorts 1328
+    // rotorLeftPorts 1354
+    // right to left
+    // rotorRightPorts 1380
+    // rotorLeftPorts 1406
+    // rotorRightPorts 2680
+    // rotorLeftPorts 2706
+
+    let path = dijkstra.shortestPath(mechanics.nodes[0], mechanics.nodes[56], {
       edgeCost: function (e) {
         return e.data.length;
       },
@@ -413,16 +424,21 @@ export default {
     //   .join()
 
     console.log('path', path)
-    // console.log('from', path[0].from.data)
-    // console.log('to', path[0].to.data)
 
-    // // the second to last node is our answer
-    // let cipherPath = route[route.length - 1]
-    
-    // console.log('cipherPath.to', cipherPath.to)
-
-    // return cipherPath.to.letter
-    return path[0].data.combination.letter
+    if (path === null) {
+      // you can't get there from here
+      return 'y'
+    } else {
+      // the second to last node is our answer
+      let cipherPath = path[path.length - 2]
+  
+      // return scambled letter
+      if (cipherPath) {
+        return cipherPath.data.combination.letter
+      } else {
+        return 'z'
+      }
+    }
   },
   cleanupCombinations: async function (db: any) {
     let oldCombinations = await db.combinations.find({
