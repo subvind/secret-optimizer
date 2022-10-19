@@ -34,6 +34,7 @@ export default {
   required: ['id', 'order', 'inputCombination', 'outputCombination', 'length', 'rotor', 'createdAt'],
   indexes: [
     'rotor',
+    'order',
     ['inputCombination', 'rotor'],
     ['outputCombination', 'rotor'],
     'createdAt',

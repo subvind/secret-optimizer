@@ -66,6 +66,7 @@ export default {
   required: ['id', 'seed', 'alphabet', 'quorum', 'targetCombinationCount', 'targetRotorCount', 'createdAt'],
   indexes: [
     ['seed', 'quorum'],
+    'order',
     'createdAt',
   ]
 }

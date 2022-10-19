@@ -41,9 +41,9 @@ export default {
       ]
     }).exec()
     
-    let enterRotor
-    let inRotor
-    let spunRotorsRTL
+    let enterRotor: any
+    let inRotor: any
+    let spunRotorsRTL: Array<any> = []
     if (rotorsRTL) {
       let index = 0
       for (const rotor of rotorsRTL) {
@@ -58,6 +58,9 @@ export default {
       }
     }
 
+    // debug
+    console.log('spunRotorsRTL', spunRotorsRTL.length)
+
     /**
      * rotors from left to right
      */
@@ -71,9 +74,9 @@ export default {
       ]
     }).exec()
 
-    let outRotor
-    let exitRotor
-    let spunRotorsLTR
+    let outRotor: any
+    let exitRotor: any
+    let spunRotorsLTR: Array<any> = []
     if (rotorsLTR) {
       let index = 0
       for (const rotor of rotorsLTR) {
@@ -87,6 +90,9 @@ export default {
         index++
       }
     }
+
+    // debug
+    console.log('spunRotorsLTR', spunRotorsLTR.length)
 
     /**
      * reflector

@@ -49,5 +49,6 @@ export default {
   indexes: [
     ['seed', 'machine'],
     'createdAt',
+    'order',
   ]
 }

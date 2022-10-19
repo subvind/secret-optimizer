@@ -11,6 +11,7 @@ import plugboardMethods from './methods/plugboards'
 import quorums from './schema/quorums'
 import quorumMethods from './methods/quorums'
 import reflectors from './schema/reflectors'
+import reflectorMethods from './methods/reflectors'
 import rotors from './schema/rotors'
 import rotorMethods from './methods/rotors'
 
@@ -35,7 +36,8 @@ async function addCollectionsToDatabase (database) {
       methods: quorumMethods
     },
     reflectors: {
-      schema: reflectors
+      schema: reflectors,
+      methods: reflectorMethods
     },
     rotors: {
       schema: rotors,

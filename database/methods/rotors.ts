@@ -10,13 +10,14 @@ export default {
     // these crosswires
     let rotorCrosswires = await db.crosswires.find({
       selector: {
-        seed: this.seed,
         rotor: this.id
       },
       sort: [
         { order: 'asc' } // always start in this order
       ]
     }).exec()
+
+    console.log('rotorCrosswires', rotorCrosswires.length)
 
     // make nodes
     let rotorRightPorts = []
@@ -39,18 +40,25 @@ export default {
 
     // align nodes by
     // spin rotors by shift and direction
-    function arrayRotate(arr, reverse, count) {
-      for (let i = 0; 0 < count; i++) {
+    function arrayRotate(arr: Array<any>, reverse: boolean, count: number) {
+      for (let i = 0; i < count; i++) {
         if (reverse) {
-          arr.unshift(arr.pop());
+          let elm = arr.pop() // removes the last element from an array
+          arr.unshift(elm) // add to the beginning of an array
         } else {
-          arr.push(arr.shift());
+          let elm = arr.shift() // removes the first element from an array
+          arr.push(elm) // add to the ending of an array
         }
       }
       return arr;
     }
     rotorRightPorts = arrayRotate(rotorRightPorts, this.direction, this.shift)
     rotorLeftPorts = arrayRotate(rotorLeftPorts, this.direction, this.shift)
+
+    // debug
+    // console.log('rotorRightPorts', rotorRightPorts.length)
+    // console.log('rotorLeftPorts', rotorLeftPorts.length)
+
     for (const port of rotorRightPorts) {
       mechanics.nodes.push(port.node)
     }
