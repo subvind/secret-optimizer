@@ -17,7 +17,7 @@ export default {
       ]
     }).exec()
 
-    console.log('rotorCrosswires', rotorCrosswires.length)
+    // console.log('rotorCrosswires', rotorCrosswires.length) // noisy
 
     // make nodes
     let rotorRightPorts = []
@@ -77,6 +77,7 @@ export default {
     }
 
     return {
+      id: this.id, // used for rotorGatewayId
       rotorRightPorts,
       rotorLeftPorts
     }

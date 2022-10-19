@@ -10,14 +10,14 @@ export default {
    */
   async assemble (db: any, mechanics: any, enterRotor: any, exitRotor: any) {
     // all combinations
-    let combinations = db.combinations.find({
+    let combinations = await db.combinations.find({
       selector: {
         machine: this.machine
       },
       sort: [
         { createdAt: 'asc' } // always start in this order
       ]
-    })
+    }).exec()
 
     // make nodes
     let firstLevelPorts = []
@@ -25,15 +25,15 @@ export default {
     for (let i = 0; i < this.targetCombinationCount; i++) {
       firstLevelPorts.push(
         {
-          order: combinations.firstLevelOrders[i],
-          node: mechanics.structure.addVertex({ id: this.id, part: "plugboard" }),
+          order: this.firstLevelOrders[i],
+          node: mechanics.structure.addVertex({ id: this.id, combination: combinations[i], level: 1, part: "plugboard" }),
           combination: combinations[i]
         }
       );
       secondLevelPorts.push(
         {
-          order: combinations.secondLevelOrders[i],
-          node: mechanics.structure.addVertex({ id: this.id, part: "plugboard" }),
+          order: this.secondLevelOrders[i],
+          node: mechanics.structure.addVertex({ id: this.id, combination: combinations[i], level: 2, part: "plugboard" }),
           combination: combinations[i]
         }
       );
@@ -60,7 +60,7 @@ export default {
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
         length: 0,
-        combination: firstLevelPorts[i].combination,
+        combination: combinations.filter((value) => { return value.id === firstLevelPorts[i].combination })[0],
         part: 'keyboard'
       }
       mechanics.structure.addEdge(mechanics.nodes[0], firstLevelPorts[i].node, edge);
@@ -81,26 +81,22 @@ export default {
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
         plugboardId: secondLevelPorts[i].combination.id,
-        rotorGatewayId: enterRotor.crosswire.id,
+        rotorGatewayId: enterRotor.id,
         length: 0,
-        type: 'gateway'
+        part: 'gateway'
       }
-      mechanics.nodes.push(
-        mechanics.structure.addEdge(secondLevelPorts[i].node, enterRotor[i].node, edge)
-      );
+      mechanics.structure.addEdge(secondLevelPorts[i].node, enterRotor.rotorRightPorts[i].node, edge)
     }
 
     // connect exitRotor to secondLevel
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
         plugboardId: secondLevelPorts[i].combination.id,
-        rotorGatewayId: enterRotor.crosswire.id,
+        rotorGatewayId: exitRotor.id,
         length: 0,
-        type: 'gateway'
+        part: 'gateway'
       }
-      mechanics.nodes.push(
-        mechanics.structure.addEdge(enterRotor.node, secondLevelPorts[i].node, edge)
-      );
+      mechanics.structure.addEdge(exitRotor.rotorLeftPorts[i].node, secondLevelPorts[i].node, edge)
     }
 
     // connect secondLevel to firstLevel
@@ -121,7 +117,7 @@ export default {
         combination: firstLevelPorts[i].combination,
         part: 'lightboard'
       }
-      mechanics.structure.addEdge(firstLevelPorts[i].node, mechanics.nodes[1].node, edge);
+      mechanics.structure.addEdge(firstLevelPorts[i].node, mechanics.nodes[1], edge);
     }
 
     return {

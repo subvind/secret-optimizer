@@ -144,7 +144,7 @@ export default {
           rightId: right[i].crosswire.id,
           leftId: left[i].crosswire.id,
           length: right[i].crosswire.length + left[i].crosswire.length,
-          type: 'link'
+          part: 'link'
         }
         mechanics.nodes.push(
           mechanics.structure.addEdge(right[i].node, left[i].node, edge)
@@ -174,7 +174,7 @@ export default {
           leftId: left[i].crosswire.id,
           rightId: right[i].crosswire.id,
           length: left[i].crosswire.length + right[i].crosswire.length,
-          type: 'link'
+          part: 'link'
         }
         mechanics.nodes.push(
           mechanics.structure.addEdge(left[i].node, right[i].node, edge)
@@ -287,6 +287,8 @@ export default {
       await this.scramble(db)
       await this.assemble(db)
       ciphertext = await this.processMessage(db, letter)
+    } else {
+      console.log('error: combination not found')
     }
 
     return ciphertext
@@ -385,12 +387,18 @@ export default {
 
     // find graph starting node based on letter
     let startNode = mechanics.nodes.findIndex((value, index) => {
-      return value.keyboardLetter === letter
+      if (value.data.part === 'plugboard' && value.data.level === 1) {
+        return value.data.combination.letter === letter
+      } else {
+        return false
+      }
     })
+
+    console.log('proccessMessage', startNode, mechanics.completeId)
 
     // computes the shortestPath between nodes 0 and 1,
     // using the single number stored in each as its cost
-    let path = dijkstra.shortestPath(startNode, mechanics.completeId, {
+    let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mechanics.completeId], {
       edgeCost: function (e) {
         return e.data.length;
       },
@@ -398,16 +406,23 @@ export default {
     
     // causeEdge.data // => {length: 0.5, combination: {a}, part: 'keyboard'}
     // effectEdge.data // => {length: 0.5, combination: {a}, part: 'lightboard'}
-    let route = path
-      .map(function (e) {
-        return e.data;
-      })
-      .join()
+    // let route = path
+    //   .map(function (e) {
+    //     return e.data;
+    //   })
+    //   .join()
 
-    // the second to last node is our answer
-    let cipherNode = route[route.length - 2]
+    console.log('path', path)
+    // console.log('from', path[0].from.data)
+    // console.log('to', path[0].to.data)
 
-    return cipherNode.lightboardLetter
+    // // the second to last node is our answer
+    // let cipherPath = route[route.length - 1]
+    
+    // console.log('cipherPath.to', cipherPath.to)
+
+    // return cipherPath.to.letter
+    return path[0].data.combination.letter
   },
   cleanupCombinations: async function (db: any) {
     let oldCombinations = await db.combinations.find({
