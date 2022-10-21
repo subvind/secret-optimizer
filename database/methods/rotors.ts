@@ -17,7 +17,9 @@ export default {
       ]
     }).exec()
 
-    // console.log('rotorCrosswires', rotorCrosswires.length) // noisy
+    // for (const rotorCrosswire of rotorCrosswires) {
+    //   console.log('rotorCrosswire.length', rotorCrosswire.length) // noisy
+    // }
 
     // make nodes
     let rotorRightPorts = []
@@ -99,7 +101,7 @@ export default {
     // scramble these crosswires
     let rotorCrosswires = await db.crosswires.find({
       selector: {
-        seed: this.seed,
+        // seed: this.seed, // use rotor seed instead
         rotor: this.id
       },
       sort: [
@@ -127,7 +129,6 @@ export default {
         }
       })
     }
-    // console.log('scramble crosswires', this.id) // noisy
   },
   cleanupCrosswires: async function (db: any) {
     let oldCrosswires = await db.crosswires.find({

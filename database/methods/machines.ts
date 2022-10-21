@@ -423,7 +423,7 @@ export default {
     //   })
     //   .join()
 
-    console.log('path', path) // has giant output
+    // console.log('path', path) // has giant output
 
     if (path === null) {
       // you can't get there from here
