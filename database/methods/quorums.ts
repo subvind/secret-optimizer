@@ -1,3 +1,4 @@
+import seedrandom from 'seedrandom'
 import { v4 as uuidv4 } from 'uuid';
 
 export default {
@@ -30,13 +31,15 @@ export default {
   },
   initMachines: async function (db: any, scramble: string) {
     let machines = []
-
+    let rng = seedrandom.xor4096(this.seed)
+    
     // create machines
     for (let i = 1; i <= this.targetMemberCount; i++) {
       let machine = await db.machines.insert({
         id: uuidv4(),
         seed: this.seed,
         main: scramble,
+        order: rng(),
         alphabet: scramble.substring(0, this.targetCombinationCount),
         quorum: this.id,
         layerBy: this.layerBy,
