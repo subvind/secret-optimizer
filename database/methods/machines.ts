@@ -339,7 +339,7 @@ export default {
     console.log(seed)
     if (machineRotors) {
       for (const rotor of machineRotors) {
-        let query = db.rotors.findOne({
+        let query = db.rotors.find({
           selector: {
             id: rotor.id
           }
@@ -409,7 +409,7 @@ export default {
     // rotorRightPorts 2680
     // rotorLeftPorts 2706
 
-    let path = dijkstra.shortestPath(mechanics.nodes[0], mechanics.nodes[56], {
+    let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mechanics.completeId], {
       edgeCost: function (e) {
         return e.data.length;
       },
@@ -423,17 +423,18 @@ export default {
     //   })
     //   .join()
 
-    console.log('path', path)
+    console.log('path', path) // has giant output
 
     if (path === null) {
       // you can't get there from here
       return 'y'
     } else {
-      // the second to last node is our answer
-      let cipherPath = path[path.length - 2]
+      // the last edge is our answer
+      let cipherPath = path[path.length - 1]
   
       // return scambled letter
       if (cipherPath) {
+        console.log('cipherPath', cipherPath)
         return cipherPath.data.combination.letter
       } else {
         return 'z'

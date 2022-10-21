@@ -62,17 +62,17 @@ export default {
     for (const port of rotorRightPorts) {
       mechanics.nodes.push(port.node)
     }
-    console.log('rotorRightPorts', mechanics.nodes.length)
+    // console.log('rotorRightPorts', mechanics.nodes.length)
     for (const port of rotorLeftPorts) {
       mechanics.nodes.push(port.node)
     }
-    console.log('rotorLeftPorts', mechanics.nodes.length)
+    // console.log('rotorLeftPorts', mechanics.nodes.length)
 
     // connect crosswires
     for (let i = 0; i < this.targetCrosswireCount; i++) {
       let edge = {
         id: rotorCrosswires[i].id,
-        length: rotorCrosswires[i].length,
+        length: rotorLeftPorts[i].crosswire.length + rotorLeftPorts[i].crosswire.length,
         part: 'crosswire'
       }
       // true: flow is left to right
@@ -82,6 +82,7 @@ export default {
       } else {
         mechanics.structure.addEdge(rotorRightPorts[i].node, rotorLeftPorts[i].node, edge)
       }
+      // console.log('edge', edge) // noisy
     }
 
     return {
@@ -113,22 +114,20 @@ export default {
     let seed = `${this.seed}:${environment}:machine-${machine.order}:rotor-${this.order}:${this.channelIndex}:${machine.keyPressCount}`
     let rng = seedrandom.xor4096(seed)
     // console.log(seed, rng) // noisy
-    if (rotorCrosswires) {
-      for (const crosswire of rotorCrosswires) {
-        let query = db.crosswires.findOne({
-          selector: {
-            id: crosswire.id
-          }
-        })
-        await query.update({
-          $set: {
-            order: rng(),
-            length: rng(),
-          }
-        })
-      }
-      // console.log('scramble crosswires', this.id) // noisy
+    for (const crosswire of rotorCrosswires) {
+      let query = db.crosswires.find({
+        selector: {
+          id: crosswire.id
+        }
+      })
+      await query.update({
+        $set: {
+          order: rng(),
+          length: rng(),
+        }
+      })
     }
+    // console.log('scramble crosswires', this.id) // noisy
   },
   cleanupCrosswires: async function (db: any) {
     let oldCrosswires = await db.crosswires.find({

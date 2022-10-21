@@ -173,7 +173,7 @@ export default {
       secondLevelOrders.push(rng())
     }
 
-    let query = db.plugboards.findOne({
+    let query = db.plugboards.find({
       selector: {
         id: this.id
       }
