@@ -416,22 +416,32 @@ export default {
     for (const edge of path) {
       console.log('route through', edge.data.part)
 
-      if (edge.data.part === 'crosswire') {
-        console.log('crosswire direction', edge.data.direction)
-        console.log('crosswire inPortOrder', edge.data.inPortOrder)
-        console.log('crosswire distance', edge.data.length)
-        console.log('crosswire outPortOrder', edge.data.outPortOrder)
-      } else if (edge.data.part === 'reflector') {
-        console.log('reflector direction', null)
-        console.log('reflector inPortOrder', edge.data.inPortOrder)
-        console.log('reflector distance', edge.data.length)
-        console.log('reflector outPortOrder', edge.data.outPortOrder)
-      } else if (edge.data.part === 'link') {
-        console.log('link direction', edge.data.direction)
-        console.log('link inCrosswireOrder', edge.data.inCrosswireOrder)
-        console.log('link distance', edge.data.length)
-        console.log('link outCrosswireOrder', edge.data.outCrosswireOrder)
-      }
+      // if (edge.data.part === 'crosswire') {
+      //   console.log('crosswire direction', edge.data.direction)
+      //   console.log('crosswire inPortOrder', edge.data.inPortOrder)
+      //   console.log('crosswire distance', edge.data.length)
+      //   console.log('crosswire outPortOrder', edge.data.outPortOrder)
+      // } else if (edge.data.part === 'reflector') {
+      //   console.log('reflector direction', null)
+      //   console.log('reflector inPortOrder', edge.data.inPortOrder)
+      //   console.log('reflector distance', edge.data.length)
+      //   console.log('reflector outPortOrder', edge.data.outPortOrder)
+      // } else if (edge.data.part === 'link') {
+      //   console.log('link direction', edge.data.direction)
+      //   console.log('link inCrosswireOrder', edge.data.inCrosswireOrder)
+      //   console.log('link distance', edge.data.length)
+      //   console.log('link outCrosswireOrder', edge.data.outCrosswireOrder)
+      // } else if (edge.data.part === 'gateway') {
+      //   console.log('gateway plugboardId', edge.data.plugboardId)
+      //   console.log('gateway rotorGatewayId', edge.data.rotorGatewayId)
+      // } else if (edge.data.part === 'plugboard') {
+      //   console.log('plugboard from', edge.data.from.number, edge.data.from.letter)
+      //   console.log('plugboard to', edge.data.to.number, edge.data.to.letter)
+      // } else if (edge.data.part === 'keyboard') {
+      //   console.log('keyboard combination', edge.data.combination.number, edge.data.combination.letter)
+      // } else if (edge.data.part === 'lightboard') {
+      //   console.log('lightboard combination', edge.data.combination.number, edge.data.combination.letter)
+      // }
     }
 
     if (path === null) {

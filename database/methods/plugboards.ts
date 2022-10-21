@@ -89,7 +89,6 @@ export default {
     // input connect beginning to firstLevel
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
-        length: 0,
         combination: combinations.filter((value) => { return value.id === firstLevelInputPorts[i].combination })[0],
         part: 'keyboard'
       }
@@ -99,7 +98,6 @@ export default {
     // input connect firstLevel to secondLevel
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
-        length: firstLevelInputPorts[i].order + secondLevelInputPorts[i].order,
         from: firstLevelInputPorts[i].combination,
         to: secondLevelInputPorts[i].combination,
         part: 'plugboard'
@@ -112,7 +110,6 @@ export default {
       let edge = {
         plugboardId: secondLevelInputPorts[i].combination.id,
         rotorGatewayId: enterRotor.id,
-        length: 0,
         part: 'gateway'
       }
       mechanics.structure.addEdge(secondLevelInputPorts[i].node, enterRotor.rotorRightPorts[i].node, edge)
@@ -123,16 +120,14 @@ export default {
       let edge = {
         plugboardId: secondLevelOutputPorts[i].combination.id,
         rotorGatewayId: exitRotor.id,
-        length: 0,
         part: 'gateway'
       }
-      mechanics.structure.addEdge(exitRotor.rotorLeftPorts[i].node, secondLevelOutputPorts[i].node, edge)
+      mechanics.structure.addEdge(exitRotor.rotorRightPorts[i].node, secondLevelOutputPorts[i].node, edge)
     }
 
     // output connect secondLevel to firstLevel
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
-        length: firstLevelOutputPorts[i].order + secondLevelOutputPorts[i].order,
         from: secondLevelOutputPorts[i].combination,
         to: firstLevelOutputPorts[i].combination,
         part: 'plugboard'
@@ -143,7 +138,6 @@ export default {
     // output connect firstLevel to ending
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
-        length: 0,
         combination: firstLevelOutputPorts[i].combination,
         part: 'lightboard'
       }
