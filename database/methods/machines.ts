@@ -190,7 +190,7 @@ export default {
    * a way to transmit words within a sentence
    */
   async channel (db: any, chunks: string) {
-    let streams = chunks.split(' ')
+    let streams = chunks.split(this.layerBy)
     let that = this
 
     let messages = []

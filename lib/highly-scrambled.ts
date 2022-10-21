@@ -113,6 +113,7 @@ export class HighlyScrambled {
       seed: spec.key,
       main: spec.scramble,
       environment: spec.environment,
+      layerBy: spec.layerBy,
       targetMemberCount: spec.machineCount,
       targetRotorCount: spec.rotorCount,
       targetCombinationCount: spec.baseCount,

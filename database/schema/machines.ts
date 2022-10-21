@@ -20,6 +20,10 @@ export default {
       type: 'number',
       default: 0.5
     },
+    layerBy: {
+      type: 'string',
+      default: ' '
+    },
     quorum: {
       ref: 'quorum',
       type: 'string'

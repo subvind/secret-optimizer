@@ -27,6 +27,10 @@ export default {
         },
       }
     },
+    layerBy: {
+      type: 'string',
+      default: ' '
+    },
     targetMemberCount: {
       type: 'number',
       default: 26

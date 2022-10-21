@@ -25,6 +25,7 @@ console.log(`release: v${highlyScrambled.version()}`);
     machineCount: 1,
     rotorCount: 4,
     baseCount: 26,
+    layerBy: ' ',
     environment: {
       galaxy: 'a', // shift cipher
       star: 'a', // modulo cipher
@@ -38,7 +39,6 @@ console.log(`release: v${highlyScrambled.version()}`);
 
   // run calculation:
   // only "main" comibnations allowed
-  // seperated by spaces
   let message = 'hello world from austin texas'
   let secret = await machine.channel(db, message)
 

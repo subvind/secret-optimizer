@@ -39,6 +39,7 @@ export default {
         main: scramble,
         alphabet: scramble.substring(0, this.targetCombinationCount),
         quorum: this.id,
+        layerBy: this.layerBy,
         targetCombinationCount: this.targetCombinationCount,
         targetRotorCount: this.targetRotorCount,
         createdAt: Date.now() + i
