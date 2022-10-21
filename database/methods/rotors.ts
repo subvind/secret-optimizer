@@ -13,7 +13,7 @@ export default {
         rotor: this.id
       },
       sort: [
-        { order: 'asc' } // always start in this order
+        { createdAt: 'asc' } // always start in this order
       ]
     }).exec()
 
@@ -39,6 +39,10 @@ export default {
         }
       );
     }
+
+    // sort nodes by port order aka scramblification
+    rotorRightPorts.sort((a, b) => a.crosswire.rightPortOrder - b.crosswire.rightPortOrder);
+    rotorLeftPorts.sort((a, b) => a.crosswire.leftPortOrder - b.crosswire.leftPortOrder);
 
     // align nodes by
     // spin rotors by shift and direction
@@ -73,8 +77,10 @@ export default {
     // connect crosswires
     for (let i = 0; i < this.targetCrosswireCount; i++) {
       let edge = {
-        id: rotorCrosswires[i].id,
-        length: rotorLeftPorts[i].crosswire.length + rotorLeftPorts[i].crosswire.length,
+        direction: direction,
+        leftPortOrder: rotorLeftPorts[i].crosswire.leftPortOrder,
+        rightPortOrder: rotorRightPorts[i].crosswire.rightPortOrder,
+        length: rotorRightPorts[i].crosswire.length, // same as rotorLeftPorts[i].crosswire.length,
         part: 'crosswire'
       }
       // true: flow is left to right
@@ -124,7 +130,8 @@ export default {
       })
       await query.update({
         $set: {
-          order: rng(),
+          leftPortOrder: rng(),
+          rightPortOrder: rng(),
           length: rng(),
         }
       })

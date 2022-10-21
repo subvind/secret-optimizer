@@ -7,7 +7,11 @@ export default {
     id: {
       type: 'string',
     },
-    order: {
+    leftPortOrder: {
+      type: 'number',
+      default: 0.5
+    },
+    rightPortOrder: {
       type: 'number',
       default: 0.5
     },
@@ -34,7 +38,8 @@ export default {
   required: ['id', 'order', 'inputCombination', 'outputCombination', 'length', 'rotor', 'createdAt'],
   indexes: [
     'rotor',
-    'order',
+    'leftPortOrder',
+    'rightPortOrder',
     ['inputCombination', 'rotor'],
     ['outputCombination', 'rotor'],
     'createdAt',

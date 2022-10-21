@@ -390,7 +390,9 @@ export default {
       }
     })
 
-    console.log('proccessMessage', startNode, mechanics.completeId)
+    console.log('scramble letter', mechanics.nodes[startNode].data.combination.letter, mechanics.completeId)
+    console.log('scramble position', startNode)
+    console.log('scramble distination', mechanics.completeId)
 
     // computes the shortestPath between nodes 0 and 1,
     // using the single number stored in each as its cost
@@ -424,7 +426,14 @@ export default {
     //   .join()
 
     for (const edge of path) {
-      console.log('edge', edge) // has giant output
+      console.log('route through', edge.data.part)
+
+      if (edge.data.part === 'crosswire') {
+        console.log('crosswire direction', edge.data.direction)
+        console.log('crosswire leftPortOrder', edge.data.leftPortOrder)
+        console.log('crosswire rightPortOrder', edge.data.rightPortOrder)
+        console.log('crosswire distance', edge.data.length)
+      }
     }
 
     if (path === null) {
@@ -436,7 +445,7 @@ export default {
   
       // return scambled letter
       if (cipherPath) {
-        console.log('cipherPath', cipherPath)
+        console.log('scrambled letter', cipherPath.data.combination.letter)
         return cipherPath.data.combination.letter
       } else {
         return 'z'
