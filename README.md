@@ -50,11 +50,35 @@ with each key press:
 The space that exists between machines must never contain plain text messages. Instead every message between each machine must be encoded, transmitted, and then decoded. One important thing that needs to be established between machines is a consensus (important for leader election) amongst one another. There could be 100s of machines out there however the default is a quorum (min # of memberships) of 26 needed in order esablish valid rules; which is a great number for confusion because there are also only 26 possible letters.
 
 
+### Monte Carlo
+Monte Carlo methods, or Monte Carlo experiments, are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. The underlying concept is to use randomness to solve problems that might be deterministic in principle.
 ```js
 // random number generator
 var rng = seedrandom.xor4096('unique seed here...')
-console.log('rotor 1', rng());                // Always 0.9282578795792454
-console.log('rotor 2', rng());                // Always 0.3752569768646784
-console.log('rotor 3', rng());                // Always 0.1483929823472782
+console.log('crosswire 1 distance', rng());                // Always 0.9282578795792454
+console.log('crosswire 2 distance', rng());                // Always 0.3752569768646784
+console.log('crosswire 3 distance', rng());                // Always 0.1483929823472782
 // etc...
+```
+
+### Run Calculation
+```js
+let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mechanics.completeId], {
+  edgeCost: function (e) {
+    if (e.data.part === 'crosswire') {
+      return e.data.length; // distance
+    } else {
+      return 0;
+    }
+  },
+});
+```
+
+### Result
+```bash
+secret {
+  original: 'tra',
+  scrambled: 'uwb',
+  messages: [ { original: 'tra', scrambled: 'uwb', code: [Array] } ]
+}
 ```

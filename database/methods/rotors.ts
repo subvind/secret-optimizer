@@ -123,7 +123,7 @@ export default {
     let machine = await db.machines.findOne(this.machine).exec() 
     let quorum = await db.quorums.findOne(machine.quorum).exec()
     let environment = `${quorum.environment.galaxy}:${quorum.environment.star}:${quorum.environment.core}`
-    let seed = `${this.seed}:${environment}:machine-${machine.order}:rotor-${this.order}:${this.channelIndex}:${machine.keyPressCount}`
+    let seed = `${this.seed}:${environment}:machine-${machine.order}:rotor-${this.order}`
     let rng = seedrandom.xor4096(seed)
     // console.log(seed, rng) // noisy
     for (const crosswire of rotorCrosswires) {

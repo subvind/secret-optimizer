@@ -26,8 +26,8 @@ console.log(`release: v${highlyScrambled.version()}`);
   let machine = await quorum.bestMachine(db)
 
   // must be letters seperated by spaces
-  // let message = 'hello world from austin texas' // 5.5.4.6.5
-  let message = 'tra'
+  let message = 'hello world from austin texas' // 5.5.4.6.5
+  // let message = 'tra' // 3
   let value = await machine.channel(db, message)
 
   console.log('secret', value)

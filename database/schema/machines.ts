@@ -21,14 +21,6 @@ export default {
       ref: 'quorum',
       type: 'string'
     },
-    channelIndex: {
-      type: 'number',
-      default: 0
-    },
-    keyPressCount: {
-      type: 'number',
-      default: 0
-    },
     targetCombinationCount: {
       type: 'number',
       default: 26

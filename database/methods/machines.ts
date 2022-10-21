@@ -197,7 +197,9 @@ export default {
     let index: number = 0
     for (const stream of streams) {
       index++ // for every stream
-      let value = await that.stream(db, stream, index)
+
+      let channelCount = index
+      let value = await that.stream(db, stream, channelCount)
       messages.push(value)
     }
 
@@ -215,10 +217,11 @@ export default {
   /**
    * a way to transmit letters within a word
    */
-  async stream (db: any, chunk: string, channelIndex: number) {
+  async stream (db: any, chunk: string, channelCount: number) {
     let letters = chunk.split('')
     let code = []
     let that = this
+    let entropy = ''
       
     let index = 0
     for (const letter of letters) {
@@ -229,11 +232,14 @@ export default {
       // console.log('plainText', plainText) // noisy
     
       let keyPressCount = index
-      let encrypted = await that.encrypt(db, channelIndex, keyPressCount, plainText)
+      let encrypted = await that.encrypt(db, channelCount, keyPressCount, plainText, entropy)
       // console.log('encrypted', encrypted) // noisy
+
+      // feed scrambled results back into the algorythum
+      entropy = encrypted
     
       // todo: leave this out for speed and move to a different mothod
-      // let decrypted = await that.decrypt(db, channelIndex, keyPressCount, plainText)
+      // let decrypted = await that.decrypt(db, channelCount, keyPressCount, plainText)
       // // console.log('decrypted', decrypted) // noisy
 
       code.push({
@@ -256,7 +262,7 @@ export default {
   /**
    * a way to transform 1 letter into another letter 
    */
-  async cipher(db: any, channelIndex: number, keyPressCount: number, letter: string) {
+  async cipher(db: any, channelCount: number, keyPressCount: number, letter: string, entropy: string) {
     // find out what combination this letter is
     let combination = await db.combinations.findOne({
       selector: {
@@ -267,35 +273,26 @@ export default {
 
     let ciphertext: string = ''
     if (combination) {
-      // add details to machine
-      let query = db.machines.find({
-        selector: {
-          id: this.id
-        }
-      })
-      await query.update({
-        $set: {
-          input: combination.id,
-          channelIndex: channelIndex,
-          keyPressCount: keyPressCount
-        }
-      })
-
-      // console.log('encrypt', keyPressCount, combination.id) // noisy
-      await this.scramble(db)
-      await this.assemble(db)
-      ciphertext = await this.processMessage(db, letter)
+      console.log('combination', combination.number)
+      if (channelCount === 1 && keyPressCount === 1) {
+        console.log('scramble & assemble')
+        await this.scramble(db)
+        await this.assemble(db)
+      } else {
+        await this.tick(db, channelCount, keyPressCount, entropy)
+      }
+      ciphertext = await this.runCalculation(db, letter)
     } else {
-      console.log('error: combination not found')
+      console.log('combination not found')
     }
 
     return ciphertext
   },
-  async encrypt(db: any, channelIndex: number, keyPressCount: number, letter: string) {
-    return await this.cipher(db, channelIndex, keyPressCount, letter)
+  async encrypt(db: any, channelCount: number, keyPressCount: number, letter: string, entropy: string) {
+    return await this.cipher(db, channelCount, keyPressCount, letter, entropy)
   },
-  async decrypt(db: any, channelIndex: number, keyPressCount: number, letter: string) {
-    return await this.cipher(db, channelIndex, keyPressCount, letter)
+  async decrypt(db: any, channelCount: number, keyPressCount: number, letter: string, entropy: string) {
+    return await this.cipher(db, channelCount, keyPressCount, letter, entropy)
   },
   resetKeyPressCount: async function(db: any) {
     // reset key press counter back to 0
@@ -336,7 +333,7 @@ export default {
     // randomly order rotors
     let quorum = await db.quorums.findOne(this.quorum).exec()
     let environment = `${quorum.environment.galaxy}:${quorum.environment.star}:${quorum.environment.core}`
-    let seed = `${this.seed}:${environment}:machine-${this.order}:${this.channelIndex}:${this.keyPressCount}`
+    let seed = `${this.seed}:${environment}:machine-${this.order}`
     let rng = seedrandom.xor4096(seed)
     console.log(seed)
     if (machineRotors) {
@@ -349,7 +346,6 @@ export default {
         await query.update({
           $set: {
             order: rng(),
-            channelIndex: this.channelIndex,
             shift: randomIntFromInterval(rng(), 1, this.targetCombinationCount) - 1, // random spin: pick a number between 0 (min) and X (max) of total combinations
             direction: Boolean(randomIntFromInterval(rng(), 0, 1))
           }
@@ -370,7 +366,10 @@ export default {
 
     await machinePlugboard.scramble(db)
   },
-  processMessage: async function (db: any, letter: string) {
+  tick: async function (db: any, channelCount: number, keyPressCount: number, entropy: string) {
+    console.log('tick', channelCount, keyPressCount, entropy)
+  },
+  runCalculation: async function (db: any, letter: string) {
     // grab machine from mechanics
     let highlyScrambled = com.HighlyScrambled.getInstance()
 
@@ -416,7 +415,7 @@ export default {
     let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mechanics.completeId], {
       edgeCost: function (e) {
         if (e.data.part === 'crosswire') {
-          return e.data.length;
+          return e.data.length; // distance
         } else {
           return 0;
         }

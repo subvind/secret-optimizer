@@ -162,7 +162,7 @@ export default {
     let machine = await db.machines.findOne(this.machine).exec()
     let quorum = await db.quorums.findOne(machine.quorum).exec()
     let environment = `${quorum.environment.galaxy}:${quorum.environment.star}:${quorum.environment.core}`
-    let seed = `${this.seed}:${environment}:machine-${machine.order}:plugboard:${machine.channelIndex}:${machine.keyPressCount}`
+    let seed = `${this.seed}:${environment}:machine-${machine.order}:plugboard`
     let rng = seedrandom.xor4096(seed)
     console.log(seed)
   

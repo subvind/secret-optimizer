@@ -10,10 +10,6 @@ export default {
     seed: {
       type: 'string'
     },
-    channelIndex: {
-      type: 'number',
-      default: 0
-    },
     direction: {
       type: 'boolean',
       default: false
