@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import com from '../index'
 
 // not recomended
@@ -10,14 +9,16 @@ let highlyScrambled = com.HighlyScrambled.getInstance()
 // check version
 console.log(`release: v${highlyScrambled.version()}`);
 
-// 26 + 26 + 10 + 10 = 72 max
-let main = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()';
-
-// required storage system
+// demo
 (async function () {
+  // init 
   let database = await highlyScrambled.database(com.database.server)
   let db = await highlyScrambled.db()
 
+  // 26 + 26 + 10 + 10 = 72 max combinations
+  let main = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()';
+
+  // specification
   let demo = {
     key: 'isTrav',
     scramble: main,
@@ -31,12 +32,28 @@ let main = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^
     }
   }
 
+  // construct
   let quorum = await highlyScrambled.build(demo)
   let machine = await quorum.bestMachine(db)
 
-  // must be letters seperated by spaces
-  let message = 'hello world from austin texas' // 5.5.4.6.5
-  let value = await machine.channel(db, message)
+  // run calculation:
+  // only "main" comibnations allowed
+  // seperated by spaces
+  let message = 'hello world from austin texas'
+  let secret = await machine.channel(db, message)
 
-  console.log('secret', value)
+  // answer
+  console.log(secret)
 })()
+
+// {
+//   original: 'hello world from austin texas',
+//   scrambled: 'vassg jgyst cygq ebldkp dazel',
+//   messages: [
+//     { original: 'hello', scrambled: 'vassg', code: [Array] },
+//     { original: 'world', scrambled: 'jgyst', code: [Array] },
+//     { original: 'from', scrambled: 'cygq', code: [Array] },
+//     { original: 'austin', scrambled: 'ebldkp', code: [Array] },
+//     { original: 'texas', scrambled: 'dazel', code: [Array] }
+//   ]
+// }
