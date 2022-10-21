@@ -423,7 +423,9 @@ export default {
     //   })
     //   .join()
 
-    // console.log('path', path) // has giant output
+    for (const edge of path) {
+      console.log('edge', edge) // has giant output
+    }
 
     if (path === null) {
       // you can't get there from here
