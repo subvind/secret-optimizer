@@ -10,6 +10,9 @@ export default {
     seed: {
       type: 'string',
     },
+    main: {
+      type: 'string',
+    },
     targetCombinationCount: {
       type: 'number',
       default: 26

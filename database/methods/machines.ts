@@ -294,23 +294,6 @@ export default {
   async decrypt(db: any, channelCount: number, keyPressCount: number, letter: string, entropy: string) {
     return await this.cipher(db, channelCount, keyPressCount, letter, entropy)
   },
-  resetKeyPressCount: async function(db: any) {
-    // reset key press counter back to 0
-    let query = db.machines.find({
-      selector: {
-        id: this.id
-      }
-    })
-    await query.update({
-      $set: {
-        input: undefined,
-        keyPressCount: 0
-      }
-    })
-
-    // then update crosswires
-    await this.scramble(db)
-  },
   /**
    * a way to randomly organize things
    */
@@ -482,7 +465,6 @@ export default {
   },
   initCombinations: async function (db: any) {
     let combinations = []
-    // console.log('machine', this.id, 'alphabet', this.alphabet)
     
     // create combinations
     let chars = this.alphabet.split('')
@@ -493,7 +475,7 @@ export default {
       let combination = await db.combinations.insert({
         id: uuidv4(),
         letter: char,
-        number: index + 1,
+        number: index,
         machine: this.id,
         createdAt: Date.now() + index
       })
@@ -589,6 +571,7 @@ export default {
     let plugboard = db.plugboards.insert({
       id: uuidv4(),
       seed: this.seed,
+      main: this.main,
       targetCombinationCount: this.targetCombinationCount,
       machine: this.id,
     })

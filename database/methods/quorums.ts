@@ -1,8 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 
-// 26 + 26 + 10 + 10 = 72 max
-let main = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()' 
-
 export default {
   bestMachine: async function(db: any) {
     return await db.machines.findOne({
@@ -31,7 +28,7 @@ export default {
       }
     }
   },
-  initMachines: async function (db: any) {
+  initMachines: async function (db: any, scramble: string) {
     let machines = []
 
     // create machines
@@ -39,7 +36,8 @@ export default {
       let machine = await db.machines.insert({
         id: uuidv4(),
         seed: this.seed,
-        alphabet: main.substring(0, this.targetCombinationCount),
+        main: scramble,
+        alphabet: scramble.substring(0, this.targetCombinationCount),
         quorum: this.id,
         targetCombinationCount: this.targetCombinationCount,
         targetRotorCount: this.targetRotorCount,

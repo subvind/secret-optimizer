@@ -10,6 +10,9 @@ export default {
     seed: {
       type: 'string'
     },
+    main: {
+      type: 'string',
+    },
     alphabet: {
       type: 'string'
     },
@@ -55,9 +58,10 @@ export default {
       type: 'number'
     }
   },
-  required: ['id', 'seed', 'alphabet', 'quorum', 'targetCombinationCount', 'targetRotorCount', 'createdAt'],
+  required: ['id', 'seed', 'main', 'alphabet', 'quorum', 'targetCombinationCount', 'targetRotorCount', 'createdAt'],
   indexes: [
     ['seed', 'quorum'],
+    'main',
     'order',
     'createdAt',
   ]

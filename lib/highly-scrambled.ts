@@ -93,11 +93,11 @@ export class HighlyScrambled {
     }
   }
 
-  async build (seed: string, environment: any, machineCount: number, rotorCount: number, crosswireCount: number) {
+  async build (spec: any) {
     // remove existing
     const oldQuorum = await this.rxdb.quorums.findOne({
       selector: {
-        seed: seed
+        seed: spec.key
       }
     }).exec()
     if (oldQuorum) {
@@ -107,18 +107,19 @@ export class HighlyScrambled {
     }
 
     // create new
-    console.log('key', seed)
+    console.log('key', spec.key)
     let quorum = await this.rxdb.quorums.insert({
       id: uuidv4(),
-      seed: seed,
-      environment: environment,
-      targetMemberCount: machineCount,
-      targetRotorCount: rotorCount,
-      targetCombinationCount: crosswireCount,
+      seed: spec.key,
+      main: spec.scramble,
+      environment: spec.environment,
+      targetMemberCount: spec.machineCount,
+      targetRotorCount: spec.rotorCount,
+      targetCombinationCount: spec.baseCount,
     })
     console.log('quorum', quorum.id)
 
-    await quorum.initMachines(this.rxdb)
+    await quorum.initMachines(this.rxdb, spec.scramble)
 
     return quorum
   }
