@@ -78,16 +78,20 @@ export default {
     for (let i = 0; i < this.targetCrosswireCount; i++) {
       let edge = {
         direction: direction,
-        leftPortOrder: rotorLeftPorts[i].crosswire.leftPortOrder,
-        rightPortOrder: rotorRightPorts[i].crosswire.rightPortOrder,
+        inPortOrder: null,
+        outPortOrder: null,
         length: rotorRightPorts[i].crosswire.length, // same as rotorLeftPorts[i].crosswire.length,
         part: 'crosswire'
       }
       // true: flow is left to right
       // false: flow is right to left
       if (direction) {
+        edge.inPortOrder = rotorLeftPorts[i].crosswire.leftPortOrder
+        edge.outPortOrder = rotorRightPorts[i].crosswire.rightPortOrder
         mechanics.structure.addEdge(rotorLeftPorts[i].node, rotorRightPorts[i].node, edge)
       } else {
+        edge.inPortOrder = rotorRightPorts[i].crosswire.rightPortOrder
+        edge.outPortOrder = rotorLeftPorts[i].crosswire.leftPortOrder
         mechanics.structure.addEdge(rotorRightPorts[i].node, rotorLeftPorts[i].node, edge)
       }
       // console.log('edge', edge) // noisy

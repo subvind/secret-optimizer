@@ -141,9 +141,10 @@ export default {
       // link crosswires
       for (let i = 0; i < this.targetCombinationCount; i++) {
         let edge = {
-          rightId: right[i].crosswire.id,
-          leftId: left[i].crosswire.id,
-          length: right[i].crosswire.length + left[i].crosswire.length,
+          direction: false, // right to left
+          inCrosswireOrder: right[i].crosswire.leftPortOrder,
+          outCrosswireOrder: left[i].crosswire.rightPortOrder,
+          length: 0, // signals pass on to the next rotor without delay
           part: 'link'
         }
         mechanics.structure.addEdge(right[i].node, left[i].node, edge)
@@ -169,9 +170,10 @@ export default {
       // link crosswires
       for (let i = 0; i < this.targetCombinationCount; i++) {
         let edge = {
-          leftId: left[i].crosswire.id,
-          rightId: right[i].crosswire.id,
-          length: left[i].crosswire.length + right[i].crosswire.length,
+          direction: true, // left to right
+          inCrosswireOrder: left[i].crosswire.rightPortOrder,
+          outCrosswireOrder: right[i].crosswire.leftPortOrder,
+          length: 0, // signals pass on to the next rotor without delay
           part: 'link'
         }
         mechanics.structure.addEdge(left[i].node, right[i].node, edge)
@@ -413,7 +415,11 @@ export default {
 
     let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mechanics.completeId], {
       edgeCost: function (e) {
-        return e.data.length;
+        if (e.data.part === 'crosswire') {
+          return e.data.length;
+        } else {
+          return 0;
+        }
       },
     });
     
@@ -430,9 +436,19 @@ export default {
 
       if (edge.data.part === 'crosswire') {
         console.log('crosswire direction', edge.data.direction)
-        console.log('crosswire leftPortOrder', edge.data.leftPortOrder)
-        console.log('crosswire rightPortOrder', edge.data.rightPortOrder)
+        console.log('crosswire inPortOrder', edge.data.inPortOrder)
         console.log('crosswire distance', edge.data.length)
+        console.log('crosswire outPortOrder', edge.data.outPortOrder)
+      } else if (edge.data.part === 'reflector') {
+        console.log('reflector direction', null)
+        console.log('reflector inPortOrder', edge.data.inPortOrder)
+        console.log('reflector distance', edge.data.length)
+        console.log('reflector outPortOrder', edge.data.outPortOrder)
+      } else if (edge.data.part === 'link') {
+        console.log('link direction', edge.data.direction)
+        console.log('link inCrosswireOrder', edge.data.inCrosswireOrder)
+        console.log('link distance', edge.data.length)
+        console.log('link outCrosswireOrder', edge.data.outCrosswireOrder)
       }
     }
 

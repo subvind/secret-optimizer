@@ -9,21 +9,25 @@ export default {
    * from blueprints to concrete concept
    */
   async assemble (db: any, mechanics: any, inRotor: any, outRotor: any) {
+    // mirror:
     // connect a to z
     // connect b to y
     // connect c to x
     // etc...
     let inPorts = inRotor.rotorLeftPorts
-    let outPorts = outRotor.rotorLeftPorts
+    let outPorts = outRotor.rotorLeftPorts.reverse()
 
     for (let i = 0; i < this.targetCombinationCount; i++) {
       let edge = {
-        inId: inPorts[i].crosswire.id,
-        outId: outPorts[i].crosswire.id,
+        inPortOrder: inPorts[i].crosswire.leftPortOrder,
+        outPortOrder: outPorts[i].crosswire.leftPortOrder,
         length: 0,
-        part: 'reflect'
+        part: 'reflector'
       }
       mechanics.structure.addEdge(inPorts[i].node, outPorts[i].node, edge)
     }
+
+    // flip back
+    outRotor.rotorLeftPorts.reverse()
   }
 }
