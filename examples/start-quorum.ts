@@ -38,7 +38,7 @@ console.log(`release: v${highlyScrambled.version()}`);
   let machine = await quorum.bestMachine(db)
 
   // run calculation:
-  // only "main" comibnations allowed
+  // only "main" combinations allowed
   let message = 'hello world from austin texas'
   let secret = await machine.channel(db, message)
 
