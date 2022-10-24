@@ -1,11 +1,11 @@
 {
-  "name": "highly-scrambled",
+  "name": "secret-optimizer",
   "author": "Travis Burandt <travis.burandt@gmail.com> (https://istrav.com)",
   "version": "1.0.4",
   "description": "Idea Management Software (FMS)",
   "homepage": "https://istrav.com",
   "bugs": {
-    "url": "https://github.com/trabur/highly-scrambled/issues"
+    "url": "https://github.com/trabur/secret-optimizer/issues"
   },
   "license": "Fair Source 25 (v0.9).",
   "scripts": {
