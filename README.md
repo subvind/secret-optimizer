@@ -60,10 +60,48 @@ let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mec
 });
 ```
 
-### Symetric Key
-What made the enigma machine secure was all the different rotor wiring combinations. What made it not secure was if these wiring combinations fell into the wrong hands. In order to prevent such configuration from being exposed we use keys instead. They are symetric so the key that was used to encrypt a message is the only key that can decrypt said message.
+### Frequency Smoother
+In order to prevent attacks against character frequency analysis, before messages are passed into the plugboard for scrambling, we make sure that on average at least every combination is pressed once. (status: not impemented)
 
-After obtaining, during machine setup, said key is used as a "unique seed" in order to generate random numbers (xor4096) which are then applied to rotor wiring combinations. So there is no need to communicate individual machine settings because machine settings are generated. We need only to communicate keys.
+### Entropy
+The original enigma owners saw the design of one combination not being able to scramble back into itself as a benifit others saw it as a major flaw. Perhaps it's biggest flaw is that it's movements were predictable and they didn't take advantage of machine output where it could have been feed right back into the system configuration settings thus impacting further output even more.
+
+For instance, when Blechly Park cracked enigma they were able to take advantage of the fact that a 1000 piece puzzle can be solved by multiple people designated to different areas of the puzzle (parrallel). What was described above as our entropy is what would make solving this puzzle even harder (concurrent) because we are saying that piece A must be solved before piece B and piece C before D etc... 
+
+Best case, we throw our 1000 piece puzzle on the floor, and pick up one piece after another while ciphering, thus enforing that the puzzle can only be solved by repeating the same steps.
+
+### Symetric Key
+What made the enigma machine secure was all the different rotor crosswiring combinations. What made it not secure was if these crosswiring combinations fell into the wrong hands. In order to prevent such configuration from being exposed we use keys instead. They are symetric so the key that was used to encrypt a message is the only key that can decrypt said message.
+
+After obtaining, during machine setup, said key is used as a "unique seed" in order to generate random numbers (xor4096) which are then applied to rotor crosswiring combinations. So there is no need to communicate individual machine settings because machine settings are generated. We need only to communicate keys.
+
+### Key Exchange
+What happens if you want to securely share keys with someone over an untrusted network such as the internet in plain text? We use the DiffieHellman Key Exchange of course :)
+
+- https://nodejs.org/api/crypto.html#class-diffiehellman
+
+```js
+import assert from 'node:assert';
+
+const {
+  createDiffieHellman
+} = await import('node:crypto');
+
+// Generate Alice's keys...
+const alice = createDiffieHellman(2048);
+const aliceKey = alice.generateKeys();
+
+// Generate Bob's keys...
+const bob = createDiffieHellman(alice.getPrime(), alice.getGenerator());
+const bobKey = bob.generateKeys();
+
+// Exchange and generate the secret...
+const aliceSecret = alice.computeSecret(bobKey);
+const bobSecret = bob.computeSecret(aliceKey);
+
+// OK
+assert.strictEqual(aliceSecret.toString('hex'), bobSecret.toString('hex'));
+```
 
 ### Code Example
 The function "secretOptimizer.build" will create as many machines that you want which will have as many rotors that you want which will have as many base combinations as you want. Early versions of enigma had 3 rotors with 26 pins or base combinations.
