@@ -70,6 +70,24 @@ For instance, when Blechly Park cracked enigma they were able to take advantage 
 
 Best case we throw our 1000 piece puzzle on the floor and pick up one piece after another while ciphering; thus, we have enfored that the puzzle can only be solved by repeating the exact same steps.
 
+```js
+// location: database/methods/machines.ts - within the cipher method
+let ciphertext: string = ''
+if (combination) {
+  console.log('combination', combination.number)
+  if (channelCount === 1 && keyPressCount === 1) {
+    console.log('scramble & assemble')
+    await this.scramble(db)
+    await this.assemble(db)
+  } else {
+    await this.tick(db, channelCount, keyPressCount, entropy)
+  }
+  ciphertext = await this.runCalculation(db, letter)
+} else {
+  console.log('combination not found')
+}
+```
+
 ### Symetric Key
 What made the enigma machine secure was all the different rotor crosswiring combinations. What made it not secure was if these crosswiring combinations fell into the wrong hands. In order to prevent such configuration from being exposed we use keys instead. They are symetric so the key that was used to encrypt a message is the only key that can decrypt said message.
 
