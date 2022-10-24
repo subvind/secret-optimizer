@@ -68,18 +68,6 @@ export class SecretOptimizer {
     return mechanics[0]
   }
 
-  calculate(machineGraph: string) {
-    let that = this
-    return {
-      encode(text: string) {
-
-      },
-      decode(text: string) {
-
-      }
-    }
-  }
-
   machines(seed: string) {
     let that = this
     return {
