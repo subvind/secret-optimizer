@@ -8,9 +8,11 @@ I present to you an enigma inspired monte carlo flying spaghetti monster and you
 
 
 ### Node Package Manager
-Algorithm is programmed in TypeScript and runs in both environments client/browser and server/node.js. This is the only language that is currently supported for now. Waiting for API to stabalize before implementing elsewhere. 
+Algorithm is programmed in TypeScript and runs in both environments client/browser and server/node.js. This is the only language that is currently supported for now. Waiting for API to stabalize before implementing elsewhere.
+
+- https://www.npmjs.com/package/secret-optimizer
+
 ```bash
-# https://www.npmjs.com/package/secret-optimizer
 npm install secret-optimizer
 ```
 
