@@ -2,19 +2,19 @@ import { v4 as uuidv4 } from 'uuid';
 import { version } from '../package.json';
 import jkstra from 'jkstra'
 
-export class HighlyScrambled {
+export class SecretOptimizer {
   private rxdb: any = null;
-  private static instance: HighlyScrambled;
+  private static instance: SecretOptimizer;
   private mechanics: Array<any> = []
 
   private constructor() {}
 
-  public static getInstance(): HighlyScrambled {
-    if (!HighlyScrambled.instance) {
-      HighlyScrambled.instance = new HighlyScrambled();
+  public static getInstance(): SecretOptimizer {
+    if (!SecretOptimizer.instance) {
+      SecretOptimizer.instance = new SecretOptimizer();
     }
 
-    return HighlyScrambled.instance;
+    return SecretOptimizer.instance;
   }
 
   public db(): Promise<any> {

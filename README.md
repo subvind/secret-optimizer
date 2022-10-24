@@ -1,10 +1,18 @@
-Highly Scrambled
+secret-optimizer
 ========
 I present to you an enigma inspired monte carlo flying spaghetti monster and your goal is to find pairs of entanglement (two nodes connected by some path) and order them by shortest distance; you must find the quickest (smallest spaghetti noodle) way through a chaotic network of other noodles (monster).
 
 | Spaghetti                | Monster                  |
 | ------------------------ | ------------------------ |
 | ![image](images/hs.webp) | ![image](images/hs.jpeg) |
+
+
+### Node Package Manager
+Algorithm is programmed in TypeScript and runs in both environments client/browser and server/node.js. This is the only language that is currently supported for now. Waiting for API to stabalize before implementing elsewhere. 
+```bash
+# https://www.npmjs.com/package/secret-optimizer
+npm install secret-optimizer
+```
 
 ### Enigma Inspired
 We are passing signals through a bunch of spinning and swapping rotors. Signals also pass through a plugboard. They also bounce off a reflector so, just like enigma, machine output will return any combination except the combination that was just pressed.
@@ -53,21 +61,21 @@ let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mec
 ### Symetric Key
 What made the enigma machine secure was all the different rotor wiring combinations. What made it not secure was if these wiring combinations fell into the wrong hands. In order to prevent such configuration from being exposed we use keys instead. They are symetric so the key that was used to encrypt a message is the only key that can decrypt said message.
 
-After obtaining, during machine setup, said key is used as a "unique seed" in order to generate random numbers (xor4096) which are then applied to rotor wiring combinations. So there is no need to communicate indevidual machine settings because machine settings are generated. We need only to communicate keys.
+After obtaining, during machine setup, said key is used as a "unique seed" in order to generate random numbers (xor4096) which are then applied to rotor wiring combinations. So there is no need to communicate individual machine settings because machine settings are generated. We need only to communicate keys.
 
 ### Code Example
-The function "highlyScrambled.build" will create as many machines that you want which will have as many rotors that you want which will have as many base combinations as you want. Early versions of enigma had 3 rotors with 26 pins or base combinations.
+The function "secretOptimizer.build" will create as many machines that you want which will have as many rotors that you want which will have as many base combinations as you want. Early versions of enigma had 3 rotors with 26 pins or base combinations.
 
-Notice how "Layer By" is used to split up a message into smaller chunks. In the spec below messages will be split by the space character.
+Notice how "Layer By" is used to silo messages into smaller chunks. In the spec below messages will be split by the space character.
 
-Mechanically speaking, when ciphering, for each layer of a message we trigger a reordering of all rotors then for each combination we trigger a respinning of all rotors. Which is much more complicated than enigma which turned rotors around like a car's milage tracker.
+Mechanically speaking, when ciphering, for each layer of a message we trigger a reordering of all rotors then for each combination we trigger a respinning of all rotors. These substitution and transposition computations are much more complicated than enigma which only turned rotors around like a car's milage tracker.
 
 The "main" variable is important because it complicates things even more as we use it's value to wire up the plugboard. Therefore, each combination must be unique and their positioning is crucial.
 
 ```js
 // init 
-let database = await highlyScrambled.database(com.database.server)
-let db = await highlyScrambled.db()
+let database = await secretOptimizer.database(chat.database.server)
+let db = await secretOptimizer.db()
 
 // 26 + 26 + 10 + 10 = 72 max combinations
 let main = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()';
@@ -88,7 +96,7 @@ let demo = {
 }
 
 // construct
-let quorum = await highlyScrambled.build(demo)
+let quorum = await secretOptimizer.build(demo)
 let machine = await quorum.bestMachine(db)
 
 // run calculation:
@@ -128,4 +136,19 @@ console.log(secret)
     { original: 'nuszx', scrambled: 'texas', code: [Array] }
   ]
 }
+```
+
+### Versioning
+Following the https://semver.org/ website where there is a series of three numbers [MAJOR, MINOR, PATCH] that define how changes have been made to the code. In our case two machines trying to communicate with each other that have different MAJOR versions will not be able to do so. Because, only MINOR and PATCH changes are compatible with one another.
+
+```bash
+# tag a vew version
+npm version v1.0.1 --no-git-tag-version
+
+# check everything in
+git add . && git commit -m "version" && git push
+
+# then check version tag in
+git tag v1.0.1
+git push --tags
 ```

@@ -9,8 +9,8 @@ export default {
    * from blueprints to concrete concept
    */
   async assemble (db: any) {
-    let highlyScrambled = com.HighlyScrambled.getInstance()
-    let mechanics = await highlyScrambled.createMechanics(this)
+    let secretOptimizer = chat.SecretOptimizer.getInstance()
+    let mechanics = await secretOptimizer.createMechanics(this)
 
     /**
      * begin: 0
@@ -354,9 +354,9 @@ export default {
   },
   runCalculation: async function (db: any, letter: string) {
     // grab machine from mechanics
-    let highlyScrambled = com.HighlyScrambled.getInstance()
+    let secretOptimizer = chat.SecretOptimizer.getInstance()
 
-    let mechanics = await highlyScrambled.getMechanics(this)
+    let mechanics = await secretOptimizer.getMechanics(this)
     // let workingParts = {
     //   blueprint: machine.id,
     //   structure: graph,

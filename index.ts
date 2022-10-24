@@ -1,8 +1,8 @@
-import { HighlyScrambled } from './lib/highly-scrambled'
+import { SecretOptimizer } from './lib/secret-optimizer'
 import * as database from './database/index'
 
 let result = {
-  HighlyScrambled: HighlyScrambled,
+  SecretOptimizer: SecretOptimizer,
   database: database
 }
 

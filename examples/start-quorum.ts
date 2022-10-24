@@ -1,19 +1,19 @@
-import com from '../index'
+import chat from '../index'
 
 // not recomended
 require('events').EventEmitter.prototype._maxListeners = 250;
 
 // use library
-let highlyScrambled = com.HighlyScrambled.getInstance()
+let secretOptimizer = chat.SecretOptimizer.getInstance()
 
 // check version
-console.log(`release: v${highlyScrambled.version()}`);
+console.log(`release: v${secretOptimizer.version()}`);
 
 // demo
 (async function () {
   // init 
-  let database = await highlyScrambled.database(com.database.server)
-  let db = await highlyScrambled.db()
+  let database = await secretOptimizer.database(chat.database.server)
+  let db = await secretOptimizer.db()
 
   // 26 + 26 + 10 + 10 = 72 max combinations
   let main = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()';
@@ -34,7 +34,7 @@ console.log(`release: v${highlyScrambled.version()}`);
   }
 
   // construct
-  let quorum = await highlyScrambled.build(demo)
+  let quorum = await secretOptimizer.build(demo)
   let machine = await quorum.bestMachine(db)
 
   // run calculation:
