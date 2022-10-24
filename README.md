@@ -1,57 +1,19 @@
-highly-scrambled
+MSM: McSpaghettiMonster
 ========
-this fixes all of enigmas problems.
+I present to you an enigma inspired monte carlo flying spaghetti monster and your goal is to find pairs of entanglement (two nodes connected by some path) and order them by shortest distance; you must find the quickest (smallest spaghetti noodle) way through a chaotic network of other noodles (monster).
 
-enigma flaws:
-- a) pushing the same key over and over again revealed machine settings.
-- b) pushing some key "X" would never return itself "X"; instead it returned any key but "X".
-- c) settings changed with each keystroke rather than by which keystrokes were being pressed.
-- d) configuration relied on a central authority to startup and reestablish connections.
 
-every generated object starts from a seed:
-- https://www.npmjs.com/package/seedrandom
+![image](msm.jpeg)
 
-which includes:
-- generating machines
-- generating rotors
-- generating crosswires
 
-> goal: because each layer of the system may be initialized from a seed that means
-we can share settings in a simple way. So rather than telling someone crosswire
-charts, rotor positions, and what not... instead tell them a code word and
-then they can take that seed, update their config, and resume communications with you.
-
-encoding and decoding:
-- https://github.com/bbecquet/jkstra
-- wiring is done manually using a graph data structure
-- signals are passed through the machine by path routing
-
-calculating sortest path:
-- user -> keyboard letter
-- keyboard letter -> reflector
-- reflector -> lightboard letter
-- lightboard letter -> user
-
-> goal: we want to be able to press a single keyboard letter, have the signal 
-bounce through the machine off the reflector and back so that we see a single 
-lightboard letter show up.
-
-with each key press:
-- universe: in a visible environment 26 galaxies expand into the void
-- galaxy: in a gravitational environment 26 stars rotate around a black hole
-- star: in a evolutionary environment 26 quorums layered by onion model
-- quorum: in a trustless environment 26 machines move geospatialy
-- machine: in a semitrust environment 26 rotors swap
-- rotor: in a trustful environment 26 crosswires switch
-- crosswire: in a secure environment 26 letters plain text transmit
-
-> note: we will be encoding and decoding within machines; the number of possible combinations here is 1 machine with 26 rotors each with 26 crosswires each with 26 letters each // MATH: 26^26^26... = Infinity
-
-The space that exists between machines must never contain plain text messages. Instead every message between each machine must be encoded, transmitted, and then decoded. One important thing that needs to be established between machines is a consensus (important for leader election) amongst one another. There could be 100s of machines out there however the default is a quorum (min # of memberships) of 26 needed in order esablish valid rules; which is a great number for confusion because there are also only 26 possible letters.
-
+### Enigma Inspired
+We are passing signals through a bunch of spinning and swapping rotors. Signals also pass through a plugboard. They also bounce off a reflector so, just like enigma, machine output will return any combination except the combination that was just pressed.
 
 ### Monte Carlo
 Monte Carlo methods, or Monte Carlo experiments, are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. The underlying concept is to use randomness to solve problems that might be deterministic in principle.
+
+- https://www.npmjs.com/package/seedrandom
+
 ```js
 // random number generator
 var rng = seedrandom.xor4096('unique seed here...')
@@ -61,7 +23,21 @@ console.log('crosswire 3 distance', rng());                // Always 0.148392982
 // etc...
 ```
 
-### Run Calculation
+### Navigating Nightmare
+Currently post-quantum cryptography research is mostly focused on six different approaches:
+- Lattice-based cryptography
+- Multivariate cryptography
+- Hash-based cryptography
+- Code-based cryptography
+- Supersingular elliptic curve isogeny cryptography
+- Symmetric key quantum resistance
+
+The core difficult problem that Lattice-based cryptography relies on is, "I present to you a lattice and your goal is to find two points that are relatively close to each other." These kinds of problems within lattices are known as the shortest-vector problem (SVP) and/or the Closest Vector Problem (CVP).
+
+> i'd like to propose an additional approch to the list that relies on navigation-based cryptography.
+
+- https://github.com/bbecquet/jkstra
+
 ```js
 let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mechanics.completeId], {
   edgeCost: function (e) {
@@ -74,11 +50,82 @@ let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mec
 });
 ```
 
-### Result
+### Symetric Key
+What made the enigma machine secure was all the different rotor wiring combinations. What made it not secure was if these wiring combinations fell into the wrong hands. In order to prevent such configuration from being exposed we use keys instead. They are symetric so the key that was used to encrypt a message is the only key that can decrypt said message.
+
+After obtaining, during machine setup, said key is used as a "unique seed" in order to generate random numbers (xor4096) which are then applied to rotor wiring combinations. So there is no need to communicate indevidual machine settings because machine settings are generated. We need only to communicate keys.
+
+### Code Example
+The function "highlyScrambled.build" will create as many machines that you want which will have as many rotors that you want which will have as many base combinations as you want. Early versions of enigma had 3 rotors with 26 pins or base combinations.
+
+Notice how "Layer By" is used to split up a message into smaller chunks. In the spec below messages will be split by the space character.
+
+Mechanically speaking, when ciphering, for each layer of a message we trigger a reordering of all rotors then for each combination we trigger a respinning of all rotors. Which is much more complicated than enigma which turned rotors around like a car's milage tracker.
+
+The "main" variable is important because it complicates things even more as we use it's value to wire up the plugboard. Therefore, each combination must be unique and their positioning is crucial.
+
+```js
+// init 
+let database = await highlyScrambled.database(com.database.server)
+let db = await highlyScrambled.db()
+
+// 26 + 26 + 10 + 10 = 72 max combinations
+let main = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()';
+
+// specification
+let demo = {
+  key: 'isTrav',
+  scramble: main,
+  machineCount: 1,
+  rotorCount: 4,
+  baseCount: 26,
+  layerBy: ' ',
+  environment: {
+    galaxy: 'a', // shift cipher
+    star: 'a', // modulo cipher
+    core: 'a' // route cipher
+  }
+}
+
+// construct
+let quorum = await highlyScrambled.build(demo)
+let machine = await quorum.bestMachine(db)
+
+// run calculation:
+// only "main" combinations allowed
+let message = 'hello world from austin texas'
+let secret = await machine.channel(db, message)
+
+// answer
+console.log(secret)
+```
+
+### Encoded Secret
 ```bash
-secret {
-  original: 'tra',
-  scrambled: 'uwb',
-  messages: [ { original: 'tra', scrambled: 'uwb', code: [Array] } ]
+{
+  original: 'hello world from austin texas',
+  scrambled: 'cuiiq fqgim wgqd zexnlt nuszx',
+  messages: [
+    { original: 'hello', scrambled: 'cuiiq', code: [Array] },
+    { original: 'world', scrambled: 'fqgim', code: [Array] },
+    { original: 'from', scrambled: 'wgqd', code: [Array] },
+    { original: 'austin', scrambled: 'zexnlt', code: [Array] },
+    { original: 'texas', scrambled: 'nuszx', code: [Array] }
+  ]
+}
+```
+
+### Decoded Secret
+```bash
+{
+  original: 'cuiiq fqgim wgqd zexnlt nuszx',
+  scrambled: 'hello world from austin texas',
+  messages: [
+    { original: 'cuiiq', scrambled: 'hello', code: [Array] },
+    { original: 'fqgim', scrambled: 'world', code: [Array] },
+    { original: 'wgqd', scrambled: 'from', code: [Array] },
+    { original: 'zexnlt', scrambled: 'austin', code: [Array] },
+    { original: 'nuszx', scrambled: 'texas', code: [Array] }
+  ]
 }
 ```
