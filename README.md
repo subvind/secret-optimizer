@@ -1,10 +1,10 @@
-MSM: McSpaghettiMonster
+Highly Scrambled
 ========
 I present to you an enigma inspired monte carlo flying spaghetti monster and your goal is to find pairs of entanglement (two nodes connected by some path) and order them by shortest distance; you must find the quickest (smallest spaghetti noodle) way through a chaotic network of other noodles (monster).
 
-
-![image](msm.jpeg)
-
+| Spaghetti                | Monster                  |
+| ------------------------ | ------------------------ |
+| ![image](images/hs.webp) | ![image](images/hs.jpeg) |
 
 ### Enigma Inspired
 We are passing signals through a bunch of spinning and swapping rotors. Signals also pass through a plugboard. They also bounce off a reflector so, just like enigma, machine output will return any combination except the combination that was just pressed.
