@@ -183,12 +183,12 @@ Following the https://semver.org/ website where there is a series of three numbe
 
 ```bash
 # tag a vew version
-npm version v1.0.1 --no-git-tag-version
+npm version v1.0.0 --no-git-tag-version
 
 # check everything in
 git add . && git commit -m "version" && git push
 
 # then check version tag in
-git tag v1.0.1
+git tag v1.0.0
 git push --tags
 ```
