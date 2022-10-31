@@ -60,6 +60,9 @@ let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mec
 });
 ```
 
+### Character Stuffing
+After scrambling there are still gaps between each layer that reveal parts of your secret. So we fill the gaps by taking the letter on the left and the letter on the right, match them up on a vigneere square, and then take that answer and stuff it right into the gap, thus forming a complete stream of random nonsense.
+
 ### Frequency Smoother
 In order to prevent attacks against character frequency analysis, before messages are passed into the plugboard for scrambling, we make sure that on average at least every combination is pressed once. (status: not impemented)
 
@@ -141,11 +144,14 @@ let main = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^
 // specification
 let demo = {
   key: 'isTrav',
+  trustDecoy: false, // this value is genuine
   scramble: main,
   machineCount: 1,
   rotorCount: 4,
   baseCount: 26,
+  stuffAmount: 3, // 72 * (72 * 72 * 72) * 72 = 1,934,917,632 ~chance of conflict
   layerBy: ' ',
+  signalMarker: '=',
   environment: {
     galaxy: 'a', // shift cipher
     star: 'a', // modulo cipher
@@ -194,6 +200,19 @@ console.log(secret)
     { original: 'nuszx', scrambled: 'texas', code: [Array] }
   ]
 }
+```
+
+### Structure
+```bash
+genuine: true || false
+original: hello world from austin texas
+scrambled: cuiiq fqgim wgqd zexnlt nuszx
+stuffed: ===cuiiqzzfqgimxxwgqdyyzexnltwwnuszx===
+log: ===cuiiqzzfqgimxxwgqdyyzexnltwwnuszx=====esfzzlcb===sd1zz23efjkf8=
+analysis: (33.8.13)
+frame: [33.8.13, 22.1, 256.11.9.43.22.43, 1]
+packet: {54.23.384.1}
+segment: 462
 ```
 
 ### Versioning
