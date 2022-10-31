@@ -61,7 +61,7 @@ let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mec
 ```
 
 ### Character Stuffing
-After scrambling there are still gaps between each layer that reveal parts of your secret. So we fill the gaps by taking the letter on the left and the letter on the right, match them up on a vigneere square, and then take that answer and stuff it right into the gap, thus forming a complete stream of random nonsense.
+After scrambling there are still gaps between each layer that reveal parts of the secret. So for each gap we fill it in by taking the letter on the left and the letter on the right, match them up on a vigenere square, and then stuff it's result right into the gap, thus forming a complete stream of random nonsense.
 
 ### Frequency Smoother
 In order to prevent attacks against character frequency analysis, before messages are passed into the plugboard for scrambling, we make sure that on average at least every combination is pressed once. (status: not impemented)
