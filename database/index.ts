@@ -6,6 +6,7 @@ import combinations from './schema/combinations'
 import crosswires from './schema/crosswires'
 import machines from './schema/machines'
 import machineMethods from './methods/machines'
+import oneTimePads from './schema/oneTimePads'
 import plugboards from './schema/plugboards'
 import plugboardMethods from './methods/plugboards'
 import quorums from './schema/quorums'
@@ -14,6 +15,7 @@ import reflectors from './schema/reflectors'
 import reflectorMethods from './methods/reflectors'
 import rotors from './schema/rotors'
 import rotorMethods from './methods/rotors'
+import terms from './schema/terms'
 
 async function addCollectionsToDatabase (database) {
   return await database.addCollections({
@@ -26,6 +28,9 @@ async function addCollectionsToDatabase (database) {
     machines: {
       schema: machines,
       methods: machineMethods
+    },
+    oneTimePads: {
+      schema: oneTimePads,
     },
     plugboards: {
       schema: plugboards,
@@ -42,6 +47,9 @@ async function addCollectionsToDatabase (database) {
     rotors: {
       schema: rotors,
       methods: rotorMethods
+    },
+    terms: {
+      schema: terms,
     },
   });
 }
