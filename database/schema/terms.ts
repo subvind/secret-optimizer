@@ -39,8 +39,6 @@ export default {
       type: 'number'
     },
   },
-  required: ['id', 'term', 'orbit', 'color', 'number', 'spin', 'event'],
-  indexes: [
-    ['term', 'event', 'number'],
-  ]
+  required: ['id', 'tColor', 'cColor', 'gColor', 'aColor', 'tCount', 'cCount', 'gCount', 'aCount'],
+  indexes: []
 }
