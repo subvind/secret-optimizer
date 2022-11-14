@@ -29,6 +29,7 @@ export default {
   },
   required: ['id', 'term', 'orbit', 'color', 'number', 'spin', 'event'],
   indexes: [
+    'term',
     ['term', 'event', 'number'],
   ]
 }
