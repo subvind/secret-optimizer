@@ -9,7 +9,7 @@ export default {
     },
     oneTimePads: {
       type: 'array',
-      ref: 'oneTimePads',
+      ref: 'oneTimePad',
       items: {
         type: 'string'
       }
