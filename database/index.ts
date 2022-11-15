@@ -6,6 +6,7 @@ import combinations from './schema/combinations'
 import crosswires from './schema/crosswires'
 import machines from './schema/machines'
 import machineMethods from './methods/machines'
+import members from './schema/members'
 import oneTimePads from './schema/oneTimePads'
 import plugboards from './schema/plugboards'
 import plugboardMethods from './methods/plugboards'
@@ -29,6 +30,9 @@ async function addCollectionsToDatabase (database) {
     machines: {
       schema: machines,
       methods: machineMethods
+    },
+    members: {
+      schema: members,
     },
     oneTimePads: {
       schema: oneTimePads,
