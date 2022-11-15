@@ -10,23 +10,6 @@ export default {
     seed: {
       type: 'string',
     },
-    environment: {
-      type: "object",
-      properties: {
-        galaxy: {
-          type: 'string',
-          default: 'a'
-        },
-        star: {
-          type: 'string',
-          default: 'a'
-        },
-        core: {
-          type: 'string',
-          default: 'a'
-        },
-      }
-    },
     layerBy: {
       type: 'string',
       default: ' '
@@ -43,6 +26,10 @@ export default {
       type: 'number',
       default: 26
     },
+    stuffAmount: {
+      type: 'number',
+      default: 3
+    },
     machines: {
       type: 'array',
       ref: 'machine',
@@ -51,8 +38,8 @@ export default {
       }
     },
   },
-  required: ['id', 'seed', 'targetMemberCount', 'targetRotorCount', 'targetCombinationCount'],
+  required: ['id', 'seed', 'layerBy', 'targetMemberCount', 'targetRotorCount', 'targetCombinationCount', 'stuffAmount'],
   indexes: [
-    'seed'
+    ['seed', 'layerBy', 'targetMemberCount', 'targetRotorCount', 'targetCombinationCount', 'stuffAmount']
   ]
 }

@@ -15,6 +15,7 @@ import reflectors from './schema/reflectors'
 import reflectorMethods from './methods/reflectors'
 import rotors from './schema/rotors'
 import rotorMethods from './methods/rotors'
+import scramble from './schema/scramble'
 import terms from './schema/terms'
 
 async function addCollectionsToDatabase (database) {
@@ -47,6 +48,9 @@ async function addCollectionsToDatabase (database) {
     rotors: {
       schema: rotors,
       methods: rotorMethods
+    },
+    scramble: {
+      schema: scramble,
     },
     terms: {
       schema: terms,

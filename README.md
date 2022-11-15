@@ -144,19 +144,13 @@ let main = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^
 // specification
 let demo = {
   key: 'isTrav',
-  trustDecoy: false, // this value is genuine
   scramble: main,
   machineCount: 1,
   rotorCount: 4,
   baseCount: 26,
   stuffAmount: 3, // 72 * (72 * 72 * 72) * 72 = 1,934,917,632 ~chance of conflict
   layerBy: ' ',
-  signalMarker: '=',
-  environment: {
-    galaxy: 'a', // shift cipher
-    star: 'a', // modulo cipher
-    core: 'a' // route cipher
-  }
+  signalMarker: '='
 }
 
 // construct
@@ -204,15 +198,14 @@ console.log(secret)
 
 ### Structure
 ```bash
-genuine: true || false
+decoy: hello houston texas from austin texas
+decoy: hello world from houston texas
 original: hello world from austin texas
 scrambled: cuiiq fqgim wgqd zexnlt nuszx
 stuffed: ===cuiiqzzfqgimxxwgqdyyzexnltwwnuszx===
-log: ===cuiiqzzfqgimxxwgqdyyzexnltwwnuszx=====esfzzlcb===sd1zz23efjkf8=
-analysis: (33.8.13)
-frame: [33.8.13, 22.1, 256.11.9.43.22.43, 1]
-packet: {54.23.384.1}
-segment: 462
+jam: ==esfzzlcb=====cuiiqzzfqgimxxwgqdyyzexnltwwnuszx====sd1zz23efjkf8=
+otp: __________________________________________________________________
+out: sdf438f49fh1jrubf07hiurf9w8fhui4f93w84huw98h3iuf398ru21ru1308r4389
 ```
 
 ### Versioning

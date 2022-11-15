@@ -25,12 +25,9 @@ console.log(`release: v${secretOptimizer.version()}`);
     machineCount: 1,
     rotorCount: 4,
     baseCount: 26,
+    stuffAmount: 3, // 72 * (72 * 72 * 72) * 72 = 1,934,917,632 ~chance of conflict
     layerBy: ' ',
-    environment: {
-      galaxy: 'a', // shift cipher
-      star: 'a', // modulo cipher
-      core: 'a' // route cipher
-    }
+    signalMarker: '='
   }
 
   // construct
