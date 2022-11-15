@@ -46,6 +46,10 @@ export default {
       type: 'boolean',
       default: false
     },
+    isSelf: {
+      type: 'boolean',
+      default: false
+    },
     isFamily: {
       type: 'boolean',
       default: false
