@@ -1,9 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
 import { version } from '../package.json';
 import jkstra from 'jkstra'
+import PusherJS from 'pusher-js'
+import Pusher from 'pusher'
 
 export class SecretOptimizer {
   private rxdb: any = null;
+  private wsClient: any = null;
+  private wsServer: any = null;
   private static instance: SecretOptimizer;
   private mechanics: Array<any> = []
 
@@ -23,11 +27,11 @@ export class SecretOptimizer {
     return new Promise((resolve) => {
       let interval = setInterval(async () => {
         if (that.rxdb !== null) {
-          console.log('loaded')
+          console.log('loaded database')
           clearInterval(interval)
           resolve(that.rxdb);
         } else {
-          console.log('loading', that.rxdb)
+          console.log('loading database', that.rxdb)
         }
       }, 200)
     });
@@ -39,6 +43,54 @@ export class SecretOptimizer {
       this.rxdb = await rxdb()
     }
     return this.rxdb
+  }
+
+  public wsc (): Promise<any> {
+    // check if loaded every 0.2 seconds
+    let that = this
+    return new Promise((resolve) => {
+      let interval = setInterval(async () => {
+        if (that.wsClient !== null) {
+          console.log('loaded client web socket')
+          clearInterval(interval)
+          resolve(that.wsClient);
+        } else {
+          console.log('loading client web socket', that.wsClient)
+        }
+      }, 200)
+    });
+  }
+
+  async webSocketClient (key: string, config: any) {
+    // only allow one to be loaded
+    if (this.wsClient === null) {
+      this.wsClient = new PusherJS(key, config);
+    }
+    return this.wsClient
+  }
+
+  public wss (): Promise<any> {
+    // check if loaded every 0.2 seconds
+    let that = this
+    return new Promise((resolve) => {
+      let interval = setInterval(async () => {
+        if (that.wsServer !== null) {
+          console.log('loaded server web socket')
+          clearInterval(interval)
+          resolve(that.wsServer);
+        } else {
+          console.log('loading server web socket', that.wsServer)
+        }
+      }, 200)
+    });
+  }
+
+  async webSocketServer (key: string, secret: string, config: any) {
+    // only allow one to be loaded
+    if (this.wsServer === null) {
+      this.wsServer = new Pusher({key, secret, ...config});
+    }
+    return this.wsServer
   }
 
   // blueprint and structure

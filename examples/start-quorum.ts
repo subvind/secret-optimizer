@@ -1,10 +1,10 @@
-import chat from '../index'
+import so from '../index'
 
 // not recomended
 require('events').EventEmitter.prototype._maxListeners = 250;
 
 // use library
-let secretOptimizer = chat.SecretOptimizer.getInstance()
+let secretOptimizer = so.SecretOptimizer.getInstance()
 
 // check version
 console.log(`release: v${secretOptimizer.version()}`);
@@ -12,7 +12,7 @@ console.log(`release: v${secretOptimizer.version()}`);
 // demo
 (async function () {
   // init 
-  let database = await secretOptimizer.database(chat.database.server)
+  let database = await secretOptimizer.database(so.database.server)
   let db = await secretOptimizer.db()
 
   // 26 + 26 + 10 + 10 = 72 max combinations
