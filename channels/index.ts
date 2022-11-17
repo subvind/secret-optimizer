@@ -1,21 +1,16 @@
-// https://docs.soketi.app/getting-started/client-configuration/pusher-sdk
+// https://dashboard.pusher.com/apps/1134433
 
-export let key = 'z8hxd1e3kb69q2sql188vhsjk8yhgs7w'
+export let key = '2b9237a62e1e7efd692d'
 
 export let client = {
-  appId: 'default',
-  wssHost: 'web-sockets.istrav.live',
-  wssPort: 443, // 6001,
+  appId: '1134433',
+  cluster: 'us3',
   forceTLS: true,
-  enabledTransports: ['wss'],
+  enabledTransports: ['ws', 'wss']
 }
 
 export let server = {
-  appId: 'default',
-  host: 'web-sockets.istrav.live',
-  port: 443, // 6001,
-  useTLS: true,
-  scheme: 'http',
-  // encrypted: true
-  timeout: 10000
+  appId: '1134433',
+  cluster: 'us3',
+  useTLS: true
 }
