@@ -19,23 +19,27 @@ console.log(`release: v${secretOptimizer.version()}`);
   // $8
   let channel = wsc.subscribe('signaling')
   let exchange = {
-    initiate: 'travis.burandt@gmail.com',
-    return: 'john.doe@gmail.com'
+    initiate: 'c u l8er', // travis.burandt@gmail.com
+    return: 'isTrav' // something@nothing.com
   }
 
   // verified by firebase
-  let userId = 'sdclks93eiowdwd9wd8h9'
+  let token 
+  if (localStorage) {
+    token = localStorage.getItem('firebase')
+  } else {
+    token = { uid: 'bwgEftCZ2QNaRlDZo1PyP3ejEgq2' }
+  }
 
   // my personal mailbox
-  channel.bind(`account-${userId}`, (message) => {
+  channel.bind(`account-${token.uid}`, (message) => {
     console.log(message)
   });
 
-  // listen to everything
+  // watch the news
   channel.bind('exchange', (message) => {
     console.log(message)
   });
-
 })()
 
 // stall process

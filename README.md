@@ -16,6 +16,14 @@ Algorithm is programmed in TypeScript and runs in both environments client/brows
 npm install secret-optimizer
 ```
 
+requirements:
+- https://github.com/trabur/signaling
+
+dependants:
+- https://github.com/trabur/fleet-optimizer
+- https://github.com/trabur/idea-optimizer
+- https://github.com/trabur/social-optimizer
+
 ### Enigma Inspired
 We are passing signals through a bunch of spinning and swapping rotors. Signals also pass through a plugboard. They also bounce off a reflector so, just like enigma, machine output will return any combination except the combination that was just pressed.
 
