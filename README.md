@@ -12,7 +12,7 @@ I present to you an enigma inspired monte carlo flying spaghetti monster and you
 | ------------------------ | ------------------------ |
 | ![image](images/hs.webp) | ![image](images/hs.jpeg) |
 
-I present to you a path that randomly traverses over random "content" and your goal is to figure out where the secret message is hidden within it.
+I present to you a path shared between two peers that randomly traverses over random "content" and your goal is to figure out what their shared secret message is hidden within it.
 
 | Route                    | Foam                       |
 | ------------------------ | -------------------------- |
