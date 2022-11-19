@@ -6,6 +6,24 @@ I present to you an enigma inspired monte carlo flying spaghetti monster and you
 | ------------------------ | ------------------------ |
 | ![image](images/hs.webp) | ![image](images/hs.jpeg) |
 
+flow:
+- every user is able to connect with every other user via signaling server.
+- once a connection is established a DiffieHellman key exchange happens.
+- the secretly established keys are then used to configure scramble machines.
+- meanwhile a ball bouncing machine is run on each user's end to generate one time pads (OTP).
+- after 10,000 OTPs the scramblers are then used to relay them between each other.
+- both users merge their OTPs together and then place them in a 2D grid via spiral pattern.
+- a double swinging pendulum infinitely itterates over the 2D grid thus producing an infinitely long shared stream.
+- this new OTP stream is then used to encode and decode messages between both parties.
+- perfect secrecy.
+
+dependants:
+- https://github.com/trabur/fleet-optimizer
+- https://github.com/trabur/idea-optimizer
+- https://github.com/trabur/social-optimizer
+
+requirements:
+- https://github.com/trabur/signaling
 
 ### Node Package Manager
 Algorithm is programmed in TypeScript and runs in both environments client/browser and server/node.js. This is the only language that is currently supported for now. Waiting for API to stabalize before implementing elsewhere.
@@ -15,14 +33,6 @@ Algorithm is programmed in TypeScript and runs in both environments client/brows
 ```bash
 npm install secret-optimizer
 ```
-
-requirements:
-- https://github.com/trabur/signaling
-
-dependants:
-- https://github.com/trabur/fleet-optimizer
-- https://github.com/trabur/idea-optimizer
-- https://github.com/trabur/social-optimizer
 
 ### Enigma Inspired
 We are passing signals through a bunch of spinning and swapping rotors. Signals also pass through a plugboard. They also bounce off a reflector so, just like enigma, machine output will return any combination except the combination that was just pressed.
