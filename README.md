@@ -23,7 +23,7 @@ flow:
 - once a connection is established a DiffieHellman key exchange happens.
 - the secretly established keys are then used to configure scramble machines.
 - meanwhile a ball bouncing machine is run on each user's end to generate entropic one time pads (OTP).
-- after 5,000 OTPs the scramblers are then used to relay them between each other.
+- after 5,000 OTPs the scramblers are then used to relay them between both peers.
 - both users merge their OTPs together and then place all 10,000 OTPs in a 2D grid via spiral pattern.
 - a double swinging pendulum infinitely iterates over the 2D grid thus producing an infinitely long shared stream.
 - this new OTP stream is then used to encode and decode messages between both parties.
@@ -92,9 +92,6 @@ let path = dijkstra.shortestPath(mechanics.nodes[startNode], mechanics.nodes[mec
 
 ### Character Stuffing
 After scrambling there are still gaps between each layer that reveal parts of the secret. So for each gap we fill it in by taking the letter on the left and the letter on the right, match them up on a vigenere square, and then stuff it's result right into the gap, thus forming a complete stream of random nonsense.
-
-### Frequency Smoother
-In order to prevent attacks against character frequency analysis, before messages are passed into the plugboard for scrambling, we make sure that on average at least every combination is pressed once. (status: not impemented)
 
 ### Entropy
 The original enigma owners saw the design of one combination not being able to scramble back into itself as a benifit others saw it as a major flaw. Perhaps it's biggest flaw is that it's movements were predictable and they didn't take advantage of machine output where it could have been feed right back into the system configuration settings thus impacting further output even more.
