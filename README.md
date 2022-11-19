@@ -1,10 +1,22 @@
 secret-optimizer
 ========
+I present to you a source to randomness and your goal is clone it to another location without others figuring out it's contents.
+
+| System                       | User                            |
+| ---------------------------- | ------------------------------- |
+| ![image](images/arcade.webp) | ![image](images/conscious.jpeg) |
+
 I present to you an enigma inspired monte carlo flying spaghetti monster and your goal is to find pairs of entanglement (two nodes connected by some path) and order them by shortest distance; you must find the quickest (smallest spaghetti noodle) way through a chaotic network of other noodles (monster).
 
 | Spaghetti                | Monster                  |
 | ------------------------ | ------------------------ |
 | ![image](images/hs.webp) | ![image](images/hs.jpeg) |
+
+I present to you the ability to randomly iterate over a sea of randomness and your goal is to figure out where the secret message is hidden within it. 
+
+| Transposition             | Foam                       |
+| ------------------------- | -------------------------- |
+| ![image](images/dsp.webp) | ![image](images/grid.jpeg) |
 
 flow:
 - every user is able to connect with every other user via signaling server.
@@ -18,9 +30,9 @@ flow:
 - perfect secrecy.
 
 dependants:
-- https://github.com/trabur/fleet-optimizer
-- https://github.com/trabur/idea-optimizer
 - https://github.com/trabur/social-optimizer
+- https://github.com/trabur/idea-optimizer
+- https://github.com/trabur/fleet-optimizer
 
 requirements:
 - https://github.com/trabur/signaling
