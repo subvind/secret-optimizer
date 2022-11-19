@@ -16,7 +16,7 @@ I present to you the ability to randomly iterate over a sea of randomness and yo
 
 | Transposition             | Foam                       |
 | ------------------------- | -------------------------- |
-| ![image](images/dsp.webp) | ![image](images/grid.jpeg) |
+| ![image](images/dsp.png) | ![image](images/grid.jpeg) |
 
 flow:
 - every user is able to connect with every other user via signaling server.
