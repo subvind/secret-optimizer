@@ -14,7 +14,7 @@ I present to you an enigma inspired monte carlo flying spaghetti monster and you
 
 I present to you the ability to randomly iterate over a sea of randomness and your goal is to figure out where the secret message is hidden within it. 
 
-| Transposition            | Foam                       |
+| Route                    | Foam                       |
 | ------------------------ | -------------------------- |
 | ![image](images/dsp.png) | ![image](images/grid.jpeg) |
 
