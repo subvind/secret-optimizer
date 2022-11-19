@@ -4,7 +4,7 @@ I present to you a source to randomness and your goal is clone it to another loc
 
 | System                       | User                            |
 | ---------------------------- | ------------------------------- |
-| ![image](images/arcade.webp) | ![image](images/conscious.jpeg) |
+| ![image](images/arcade.jpeg) | ![image](images/conscious.jpeg) |
 
 I present to you an enigma inspired monte carlo flying spaghetti monster and your goal is to find pairs of entanglement (two nodes connected by some path) and order them by shortest distance; you must find the quickest (smallest spaghetti noodle) way through a chaotic network of other noodles (monster).
 
