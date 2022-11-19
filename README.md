@@ -25,7 +25,7 @@ flow:
 - meanwhile a ball bouncing machine is run on each user's end to generate entropic one time pads (OTP).
 - after 5,000 OTPs the scramblers are then used to relay them between each other.
 - both users merge their OTPs together and then place all 10,000 OTPs in a 2D grid via spiral pattern.
-- a double swinging pendulum infinitely itterates over the 2D grid thus producing an infinitely long shared stream.
+- a double swinging pendulum infinitely iterates over the 2D grid thus producing an infinitely long shared stream.
 - this new OTP stream is then used to encode and decode messages between both parties.
 - perfect secrecy.
 
