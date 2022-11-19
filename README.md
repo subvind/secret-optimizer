@@ -10,7 +10,7 @@ flow:
 - every user is able to connect with every other user via signaling server.
 - once a connection is established a DiffieHellman key exchange happens.
 - the secretly established keys are then used to configure scramble machines.
-- meanwhile a ball bouncing machine is run on each user's end to generate one time pads (OTP).
+- meanwhile a ball bouncing machine is run on each user's end to generate entropic one time pads (OTP).
 - after 5,000 OTPs the scramblers are then used to relay them between each other.
 - both users merge their OTPs together and then place all 10,000 OTPs in a 2D grid via spiral pattern.
 - a double swinging pendulum infinitely itterates over the 2D grid thus producing an infinitely long shared stream.
