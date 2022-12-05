@@ -1,7 +1,7 @@
 {
   "name": "secret-optimizer",
   "author": "Travis Burandt <travis.burandt@gmail.com> (https://istrav.com)",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "the ability to establish secure connections and send secure messages between one another over insecure channels.",
   "homepage": "https://istrav.com",
   "bugs": {
