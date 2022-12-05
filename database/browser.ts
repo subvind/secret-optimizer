@@ -1,9 +1,10 @@
-// @ts-ignore
 import { createRxDatabase, addRxPlugin } from 'rxdb';
 import addCollectionsToDatabase from './index';
 
 export async function browser () {
+  // @ts-ignore
   let dexiePlugin: any = (await import('rxdb/plugins/dexie'));
+  // @ts-ignore
   let RxDBUpdatePlugin: any = (await import('rxdb/plugins/update')).RxDBUpdatePlugin;
 
   addRxPlugin(RxDBUpdatePlugin);
