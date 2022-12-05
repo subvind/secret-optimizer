@@ -81,7 +81,9 @@ export async function server () {
 }
 
 export async function browser () {
-  let dexiePlugin = (await import('rxdb/plugins/dexie'));
+  // @ts-ignore
+  let dexiePlugin: any = (await import('rxdb/plugins/dexie'));
+  // @ts-ignore
   let RxDBUpdatePlugin: any = (await import('rxdb/plugins/update')).RxDBUpdatePlugin;
 
   addRxPlugin(RxDBUpdatePlugin);
