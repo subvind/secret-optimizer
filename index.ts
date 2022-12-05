@@ -1,10 +1,14 @@
 import { SecretOptimizer } from './lib/secret-optimizer'
-import * as database from './database/index'
+import { server } from './database/server'
+import { browser } from './database/browser'
 import * as channels from './channels/index'
 
 let result = {
   SecretOptimizer: SecretOptimizer,
-  database: database,
+  database: {
+    server,
+    browser
+  },
   channels: channels
 }
 

@@ -1,5 +1,3 @@
-
-import { createRxDatabase, addRxPlugin } from 'rxdb';
 // import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 
 import combinations from './schema/combinations'
@@ -19,7 +17,7 @@ import rotorMethods from './methods/rotors'
 import scramble from './schema/scramble'
 import terms from './schema/terms'
 
-async function addCollectionsToDatabase (database) {
+export default async function addCollectionsToDatabase (database) {
   return await database.addCollections({
     combinations: {
       schema: combinations
@@ -60,38 +58,4 @@ async function addCollectionsToDatabase (database) {
       schema: terms,
     },
   });
-}
-
-export async function server () {
-  let { getRxStoragePouch, addPouchPlugin } = require('rxdb/plugins/pouchdb');
-  let { RxDBUpdatePlugin } = require('rxdb/plugins/update');
-
-  const leveldown = require('leveldown');
-
-  addPouchPlugin(require('pouchdb-adapter-leveldb'));
-  
-  addRxPlugin(RxDBUpdatePlugin);
-
-  const rxdb = await createRxDatabase({
-    name: 'data/istrav.chat',
-    storage: getRxStoragePouch(leveldown)
-  });
-
-  return await addCollectionsToDatabase(rxdb)
-}
-
-export async function browser () {
-  // @ts-ignore
-  let dexiePlugin: any = (await import('rxdb/plugins/dexie'));
-  // @ts-ignore
-  let RxDBUpdatePlugin: any = (await import('rxdb/plugins/update')).RxDBUpdatePlugin;
-
-  addRxPlugin(RxDBUpdatePlugin);
-
-  const rxdb = await createRxDatabase({
-    name: 'data/istrav.chat',
-    storage: dexiePlugin.getRxStorageDexie()
-  });
-
-  return await addCollectionsToDatabase(rxdb)
 }
